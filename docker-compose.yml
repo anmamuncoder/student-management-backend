@@ -1,0 +1,78 @@
+version: '3.9'
+
+services:
+  # -------------------------------
+  # PostgreSQL Database
+  # -------------------------------
+  db:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_NAME}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # -------------------------------
+  # Django Web Application
+  # -------------------------------
+  web:
+    build: .
+    image: myproject-web:latest
+    command: >
+      sh -c "python manage.py collectstatic --noinput &&
+            python manage.py runserver 0.0.0.0:${WEB_PORT}"
+    env_file:
+      - .env
+    volumes:
+      - .:/code
+      - ./logs:/code/logs      # <--- mount host logs folder
+    ports:
+      - "${WEB_PORT}:${WEB_PORT}"
+    depends_on:
+      - db
+    # Uncomment below if you want WebSocket / Daphne ASGI server
+    # command: daphne -b 0.0.0.0 -p ${WEB_PORT} engine.asgi:application
+
+  # -------------------------------
+  # Redis (for Celery / caching)
+  # -------------------------------
+  # redis:
+  #   image: redis:7
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+
+  # -------------------------------
+  # Celery worker
+  # -------------------------------
+  # celery:
+  #   build: .
+  #   image: myproject-celery:latest
+  #   command: celery -A engine worker --loglevel=info
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - web
+  #     - redis
+
+  # -------------------------------
+  # Celery Beat (scheduler)
+  # -------------------------------
+  # celery-beat:
+  #   build: .
+  #   image: myproject-celery-beat:latest
+  #   command: celery -A engine beat --loglevel=info
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - web
+  #     - redis
+
+volumes:
+  postgres_data:
+  # redis_data:

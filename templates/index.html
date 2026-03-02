@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django REST API</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,700;1,9..144,400;1,9..144,700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* ── DARK THEME (default) ── */
+        :root,
+        [data-theme="dark"] {
+            --bg:          #080c10;
+            --surface:     #111720;
+            --surface2:    #161d28;
+            --border:      #1e2736;
+            --border2:     #28344a;
+            --ink:         #e8edf5;
+            --ink2:        #8b97aa;
+            --ink3:        #4a5568;
+            --accent:      #3b9eff;
+            --accent-h:    #5ab0ff;
+            --green:       #10d68e;
+            --orange:      #ff7043;
+            --purple:      #a78bfa;
+            --grid-line:   rgba(59,158,255,0.04);
+            --glow1:       rgba(59,158,255,0.07);
+            --glow2:       rgba(16,214,142,0.06);
+            --glow3:       rgba(167,139,250,0.05);
+            --header-bg:   rgba(8,12,16,0.88);
+            --footer-bg:   rgba(8,12,16,0.88);
+            --b-get-bg:    rgba(59,158,255,0.12);
+            --b-post-bg:   rgba(16,214,142,0.10);
+            --b-admin-bg:  rgba(255,112,67,0.10);
+            --b-ui-bg:     rgba(167,139,250,0.10);
+            --ep-hover:    #111720;
+            --shadow:      0 4px 20px rgba(0,0,0,0.4);
+            --mono: 'IBM Plex Mono', monospace;
+            --serif: 'Fraunces', serif;
+        }
+
+        /* ── LIGHT THEME ── */
+        [data-theme="light"] {
+            --bg:          #f5f2ed;
+            --surface:     #ffffff;
+            --surface2:    #ede9e2;
+            --border:      #e0dbd2;
+            --border2:     #ccc7bc;
+            --ink:         #1a1714;
+            --ink2:        #4a4540;
+            --ink3:        #8a8278;
+            /* --accent:      #1e4f8a; */
+            --accent:    #c8440a;
+
+            --accent-h:    #2960a8;
+            --green:       #1a6b4a;
+            --orange:      #c8440a;
+            --purple:      #6b3fa0;
+            --grid-line:   rgba(30,79,138,0.05);
+            --glow1:       rgba(30,79,138,0.04);
+            --glow2:       rgba(26,107,74,0.03);
+            --glow3:       rgba(107,63,160,0.03);
+            --header-bg:   rgba(245,242,237,0.92);
+            --footer-bg:   rgba(245,242,237,0.92);
+            --b-get-bg:    rgba(30,79,138,0.08);
+            --b-post-bg:   rgba(26,107,74,0.08);
+            --b-admin-bg:  rgba(200,68,10,0.08);
+            --b-ui-bg:     rgba(100,80,60,0.07);
+            --ep-hover:    #ffffff;
+            --shadow:      0 2px 12px rgba(0,0,0,0.07);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: var(--mono);
+            min-height: 100vh;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            overflow-x: hidden;
+            position: relative;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* ── GRID BACKGROUND ── */
+        .grid-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 48px 48px;
+            transition: background-image 0.3s ease;
+        }
+
+        .grid-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse 80% 60% at 50% 40%, transparent 30%, var(--bg) 100%);
+            transition: background 0.3s ease;
+        }
+
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(120px);
+            pointer-events: none;
+            z-index: 0;
+        }
+        .glow-1 { width:600px; height:400px; background: radial-gradient(circle, var(--glow1), transparent 70%); top:-80px; left:-100px; }
+        .glow-2 { width:500px; height:500px; background: radial-gradient(circle, var(--glow2), transparent 70%); bottom:-100px; right:-80px; }
+        .glow-3 { width:300px; height:300px; background: radial-gradient(circle, var(--glow3), transparent 70%); top:40%; left:40%; }
+
+        header, main, footer, .stats-bar { position: relative; z-index: 1; }
+
+        /* ── HEADER ── */
+        header {
+            padding: 1.25rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            background: var(--header-bg);
+            backdrop-filter: blur(12px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-size: 0.78rem;
+            font-weight: 500;
+            color: var(--ink2);
+            letter-spacing: 0.04em;
+            transition: color 0.3s;
+        }
+
+        .logo-mark {
+            width: 30px; height: 30px;
+            border: 1px solid var(--border2);
+            border-radius: 7px;
+            display: grid;
+            place-items: center;
+            background: var(--surface);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .logo-mark svg {
+            width: 14px; height: 14px;
+            fill: none;
+            stroke: var(--accent);
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .live-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.65rem;
+            color: var(--green);
+            background: rgba(16,214,142,0.08);
+            border: 1px solid rgba(16,214,142,0.18);
+            padding: 0.28rem 0.7rem;
+            border-radius: 100px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        [data-theme="light"] .live-pill {
+            background: rgba(26,107,74,0.08);
+            border-color: rgba(26,107,74,0.2);
+        }
+
+        .live-dot {
+            width: 5px; height: 5px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: blink 2s ease-in-out infinite;
+            flex-shrink: 0;
+        }
+
+        @keyframes blink {
+            0%,100% { opacity: 1; }
+            50%      { opacity: 0.3; }
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+        }
+
+        .nav a {
+            font-size: 0.72rem;
+            color: var(--ink3);
+            text-decoration: none;
+            padding: 0.38rem 0.85rem;
+            border-radius: 6px;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+        }
+
+        .nav a:hover {
+            color: var(--ink);
+            border-color: var(--border2);
+            background: var(--surface);
+        }
+
+        .nav a.cta {
+            color: #fff;
+            background: var(--accent);
+            border-color: var(--accent);
+            font-weight: 500;
+        }
+
+        [data-theme="light"] .nav a.cta { color: #fff; }
+
+        .nav a.cta:hover {
+            background: var(--accent-h);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(59,158,255,0.25);
+        }
+
+        /* ── MAIN ── */
+        main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1180px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 5rem 2.5rem 4rem;
+            align-items: start;
+        }
+
+        .hero-left {
+            padding-right: 3.5rem;
+            border-right: 1px solid var(--border);
+            transition: border-color 0.3s;
+        }
+
+        .hero-right { padding-left: 3.5rem; }
+
+        .eyebrow {
+            font-size: 0.65rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--accent);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            margin-bottom: 1.75rem;
+            opacity: 0;
+            animation: up 0.5s ease 0.1s forwards;
+            transition: color 0.3s;
+        }
+
+        .eyebrow::before {
+            content: '';
+            width: 20px; height: 1px;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+
+        h1 {
+            font-family: var(--serif);
+            font-size: clamp(2.4rem, 4vw, 3.6rem);
+            font-weight: 300;
+            line-height: 1.1;
+            letter-spacing: -0.025em;
+            color: var(--ink);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: up 0.5s ease 0.2s forwards;
+            transition: color 0.3s;
+        }
+
+        h1 em {
+            font-style: italic;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .desc {
+            font-size: 0.85rem;
+            line-height: 1.85;
+            color: var(--ink2);
+            font-weight: 300;
+            margin-bottom: 2.5rem;
+            max-width: 420px;
+            opacity: 0;
+            animation: up 0.5s ease 0.3s forwards;
+            transition: color 0.3s;
+        }
+
+        .actions {
+            display: flex;
+            gap: 0.65rem;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: up 0.5s ease 0.4s forwards;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.65rem 1.4rem;
+            border-radius: 7px;
+            font-family: var(--mono);
+            font-size: 0.75rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.15s ease;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+        .btn-primary:hover {
+            background: var(--accent-h);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(59,158,255,0.25);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--ink2);
+            border-color: var(--border2);
+        }
+        .btn-ghost:hover {
+            color: var(--ink);
+            border-color: var(--ink3);
+            transform: translateY(-1px);
+        }
+
+        /* ── ENDPOINT LIST ── */
+        .section-label {
+            font-size: 0.62rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--ink3);
+            margin-bottom: 1rem;
+            opacity: 0;
+            animation: up 0.5s ease 0.25s forwards;
+            transition: color 0.3s;
+        }
+
+        .ep-list {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            opacity: 0;
+            animation: up 0.5s ease 0.35s forwards;
+        }
+
+        .ep {
+            display: grid;
+            grid-template-columns: 52px 1fr 16px;
+            align-items: center;
+            gap: 0.85rem;
+            padding: 0.8rem 0.85rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid transparent;
+            transition: all 0.15s ease;
+        }
+
+        .ep:hover {
+            background: var(--ep-hover);
+            border-color: var(--border);
+            transform: translateX(4px);
+            box-shadow: var(--shadow);
+        }
+
+        .badge {
+            font-size: 0.55rem;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            text-align: center;
+            white-space: nowrap;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .b-get   { background: var(--b-get-bg);   color: var(--accent); }
+        .b-post  { background: var(--b-post-bg);  color: var(--green); }
+        .b-admin { background: var(--b-admin-bg); color: var(--orange); }
+        .b-ui    { background: var(--b-ui-bg);    color: var(--purple); }
+
+        .ep-body { display: flex; flex-direction: column; gap: 0.18rem; }
+
+        .ep-path { font-size: 0.8rem; color: var(--ink); transition: color 0.3s; }
+        .ep-desc { font-size: 0.68rem; color: var(--ink3); transition: color 0.3s; }
+
+        .ep-arr {
+            color: var(--border2);
+            font-size: 0.8rem;
+            transition: color 0.15s, transform 0.15s;
+        }
+        .ep:hover .ep-arr { color: var(--accent); transform: translateX(3px); }
+
+        /* ── STATS BAR ── */
+        .stats-bar {
+            max-width: 1180px;
+            margin: 0 auto;
+            width: 100%;
+            padding: 0 2.5rem 4rem;
+            opacity: 0;
+            animation: up 0.5s ease 0.55s forwards;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--surface);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .stat {
+            padding: 1.4rem 1.6rem;
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            transition: border-color 0.3s;
+        }
+        .stat:last-child { border-right: none; }
+
+        .stat-dot {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            margin-bottom: 0.4rem;
+        }
+        .d-green  { background: var(--green); box-shadow: 0 0 8px var(--green); }
+        .d-blue   { background: var(--accent); }
+        .d-orange { background: var(--orange); }
+        .d-purple { background: var(--purple); }
+
+        .stat-val {
+            font-family: var(--serif);
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1;
+            transition: color 0.3s;
+        }
+
+        .stat-lbl {
+            font-size: 0.65rem;
+            color: var(--ink3);
+            letter-spacing: 0.06em;
+            transition: color 0.3s;
+        }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 1.2rem 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            background: var(--footer-bg);
+            backdrop-filter: blur(12px);
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .f-left {
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+        }
+
+        .f-tag {
+            font-size: 0.68rem;
+            /* color: var(--ink3); */
+            letter-spacing: 0.04em;
+            transition: color 0.3s;
+        }
+
+        .f-sep {
+            width: 1px; height: 12px;
+            background: var(--border2);
+            transition: background 0.3s;
+        }
+
+        .f-pill {
+            font-size: 0.62rem;
+            padding: 0.16rem 0.5rem;
+            border: 1px solid var(--border2);
+            border-radius: 4px;
+            /* color: var(--ink3); */
+            transition: all 0.3s;
+        }
+
+        footer a {
+            font-size: 0.98rem;
+            color: var(--ink2);
+            text-decoration: none;
+            transition: color 0.15s;
+        }
+        footer a:hover { color: var(--accent); }
+
+        .f-right {
+            display: flex;
+            align-items: center;
+            
+            gap: 1.25rem;
+        }
+
+        /* ── THEME TOGGLE (footer) ── */
+        .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.32rem 0.75rem;
+            border-radius: 100px;
+            border: 1px solid var(--border2);
+            background: var(--surface);
+            transition: all 0.2s ease;
+            user-select: none;
+        }
+
+        .theme-toggle:hover {
+            border-color: var(--accent);
+            background: var(--surface2);
+        }
+
+        .toggle-icon {
+            position: relative;
+            width: 14px; height: 14px;
+            flex-shrink: 0;
+        }
+
+        .toggle-icon svg {
+            position: absolute;
+            inset: 0;
+            width: 14px; height: 14px;
+            transition: opacity 0.25s ease, transform 0.3s ease;
+        }
+
+        .icon-sun  { fill: #f5a623; stroke: none; }
+        .icon-moon { fill: var(--ink2); stroke: none; }
+
+        [data-theme="dark"]  .icon-sun  { opacity: 1; transform: rotate(0deg) scale(1); }
+        [data-theme="dark"]  .icon-moon { opacity: 0; transform: rotate(90deg) scale(0.5); }
+        [data-theme="light"] .icon-sun  { opacity: 0; transform: rotate(-90deg) scale(0.5); }
+        [data-theme="light"] .icon-moon { opacity: 1; transform: rotate(0deg) scale(1); }
+
+        .toggle-label {
+            font-size: 0.65rem;
+            color: var(--ink3);
+            transition: color 0.3s;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── ANIMATIONS ── */
+        @keyframes up {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 860px) {
+            header { padding: 1rem 1.5rem; }
+            .nav { display: none; }
+
+            main {
+                grid-template-columns: 1fr;
+                padding: 3rem 1.5rem 2.5rem;
+            }
+
+            .hero-left {
+                padding-right: 0;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding-bottom: 2.5rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .hero-right { padding-left: 0; }
+
+            .stats-bar { padding: 0 1.5rem 3rem; }
+
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .stat:nth-child(2) { border-right: none; }
+            .stat:nth-child(3),
+            .stat:nth-child(4) { border-top: 1px solid var(--border); }
+            .stat:nth-child(4) { border-right: none; }
+
+            footer {
+                padding: 1rem 1.5rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="grid-bg"></div>
+<div class="glow glow-1"></div>
+<div class="glow glow-2"></div>
+<div class="glow glow-3"></div>
+
+<!-- HEADER -->
+<header>
+    <div class="logo">
+        <div class="logo-mark">
+            <svg viewBox="0 0 16 16">
+                <rect x="2" y="2" width="5" height="5" rx="1"/>
+                <rect x="9" y="2" width="5" height="5" rx="1"/>
+                <rect x="2" y="9" width="5" height="5" rx="1"/>
+                <path d="M11.5 9v6M9 11.5h5"/>
+            </svg>
+        </div>
+        django-rest-api
+    </div>
+
+    <div class="live-pill">
+        <div class="live-dot"></div>
+        server running
+    </div>
+
+    <nav class="nav">
+        <a href="/api/v1/">API Root</a>
+        <a href="/docs/">Swagger</a>
+        <a href="/redoc/">Redoc</a>
+        <a href="{% url 'admin:index' %}" class="cta">Admin Panel →</a>
+    </nav>
+</header>
+
+<!-- HERO -->
+<main>
+    <div class="hero-left">
+        <span class="eyebrow">REST API · v1.0.0</span>
+
+        <h1>Your backend<br>is <em>live</em> and<br>ready to use</h1>
+
+        <p class="desc">
+            A production-ready Django REST Framework server — PostgreSQL, JWT auth,
+            role-based permissions, versioned routing. Fully containerized with Docker.
+        </p>
+
+        <div class="actions">
+            <a href="{% url 'admin:index' %}" class="btn btn-primary">↗ Admin Panel</a>
+            <a href="/api/v1/" class="btn btn-ghost">Browse API</a>
+            <a href="/docs/" class="btn btn-ghost">View Docs</a>
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <p class="section-label">Quick access</p>
+        <div class="ep-list">
+            <a href="/api/v1/" class="ep">
+                <span class="badge b-get">GET</span>
+                <div class="ep-body">
+                    <span class="ep-path">/api/v1/</span>
+                    <span class="ep-desc">API root — all available routes</span>
+                </div>
+                <span class="ep-arr">→</span>
+            </a>
+            <a href="{% url 'admin:index' %}" class="ep">
+                <span class="badge b-admin">ADMIN</span>
+                <div class="ep-body">
+                    <span class="ep-path">/admin/</span>
+                    <span class="ep-desc">Django administration panel</span>
+                </div>
+                <span class="ep-arr">→</span>
+            </a>
+            <a href="/docs/" class="ep">
+                <span class="badge b-ui">UI</span>
+                <div class="ep-body">
+                    <span class="ep-path">/docs/</span>
+                    <span class="ep-desc">Swagger interactive documentation</span>
+                </div>
+                <span class="ep-arr">→</span>
+            </a>
+            <a href="/redoc/" class="ep">
+                <span class="badge b-ui">UI</span>
+                <div class="ep-body">
+                    <span class="ep-path">/redoc/</span>
+                    <span class="ep-desc">Redoc API reference</span>
+                </div>
+                <span class="ep-arr">→</span>
+            </a>
+            <a href="/api/v1/auth/token/" class="ep">
+                <span class="badge b-post">POST</span>
+                <div class="ep-body">
+                    <span class="ep-path">/api/v1/auth/token/</span>
+                    <span class="ep-desc">Obtain JWT access token</span>
+                </div>
+                <span class="ep-arr">→</span>
+            </a>
+            <a href="/api/v1/auth/token/refresh/" class="ep">
+                <span class="badge b-post">POST</span>
+                <div class="ep-body">
+                    <span class="ep-path">/api/v1/auth/token/refresh/</span>
+                    <span class="ep-desc">Refresh JWT access token</span>
+                </div>
+                <span class="ep-arr">→</span>
+            </a>
+        </div>
+    </div>
+</main>
+
+<!-- STATS -->
+<div class="stats-bar">
+    <div class="stats-grid">
+        <div class="stat">
+            <div class="stat-dot d-green"></div>
+            <span class="stat-val">Online</span>
+            <span class="stat-lbl">Server status</span>
+        </div>
+        <div class="stat">
+            <div class="stat-dot d-blue"></div>
+            <span class="stat-val">v1.0</span>
+            <span class="stat-lbl">API version</span>
+        </div>
+        <div class="stat">
+            <div class="stat-dot d-orange"></div>
+            <span class="stat-val">JWT</span>
+            <span class="stat-lbl">Authentication</span>
+        </div>
+        <div class="stat">
+            <div class="stat-dot d-purple"></div>
+            <span class="stat-val">PostgreSQL</span>
+            <span class="stat-lbl">Database</span>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+    <div class="f-left">
+        <!-- Theme toggle — bottom left -->
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+            <div class="toggle-icon">
+                <svg class="icon-sun" viewBox="0 0 20 20">
+                    <circle cx="10" cy="10" r="4"/>
+                    <path stroke="#f5a623" stroke-width="1.5" stroke-linecap="round" fill="none"
+                        d="M10 2v2M10 16v2M2 10h2M16 10h2M4.22 4.22l1.42 1.42M14.36 14.36l1.42 1.42M14.36 5.64l-1.42 1.42M5.64 14.36l-1.42 1.42"/>
+                </svg>
+                <svg class="icon-moon" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                </svg>
+            </div>
+            <span class="toggle-label" id="toggleLabel">Light mode</span>
+        </button>
+
+        <div class="f-sep"></div>
+        <span class="f-tag">Django REST Framework</span>
+        <div class="f-sep"></div>
+        <span class="f-tag">Docker · PostgreSQL · SimpleJWT</span>
+        <div class="f-sep"></div>
+        <span class="f-pill">Python 3.12</span>
+    </div>
+
+    <div class="f-right">
+        <span>Built by <a href="https://anmamuncoder.vercel.app/" target="_blank">anmamuncoder</a> — Software Engineer</span>
+    </div>
+</footer>
+
+<script>
+    const html  = document.documentElement;
+    const btn   = document.getElementById('themeToggle');
+    const label = document.getElementById('toggleLabel');
+
+    const saved = localStorage.getItem('theme') || 'dark';
+    html.setAttribute('data-theme', saved);
+    label.textContent = saved === 'dark' ? 'Light mode' : 'Dark mode';
+
+    btn.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        label.textContent = next === 'dark' ? 'Light mode' : 'Dark mode';
+    });
+</script>
+</body>
+</html>
