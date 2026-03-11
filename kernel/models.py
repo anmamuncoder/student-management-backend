@@ -33,3 +33,11 @@ class AuditModel(BaseModel):
             self.updated_by = user
 
         super().save(*args, **kwargs)
+
+# SoftDeleteModel to implement soft delete functionality,
+class SoftDeleteModel(models.Model):
+    is_deleted = models.BooleanField(default=False, db_index=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        abstract = True
