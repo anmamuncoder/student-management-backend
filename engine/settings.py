@@ -200,10 +200,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # -------------------------------
 # Django REST Framework 
-# -------------------------------
-# -------------------------------
-# Django REST Framework
-# -------------------------------
+# ------------------------------- 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -211,6 +208,10 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
+    
+    # Custom exception handler to standardize error responses
+    "EXCEPTION_HANDLER": "kernel.exceptions.custom_exception_handler",
+
     'DEFAULT_FILTER_BACKENDS': [
         'django_filters.rest_framework.DjangoFilterBackend',
         "rest_framework.filters.SearchFilter",
