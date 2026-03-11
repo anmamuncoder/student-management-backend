@@ -4,17 +4,17 @@ import environ
 import os
 
 # -------------------------------
-# Initialize environment variables
-# -------------------------------
-env = environ.Env()
-environ.Env.read_env()  # reads the .env file
-
-
-# -------------------------------
 # Base Directory
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # -------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+
+# -------------------------------
+# Initialize environment variables
+# -------------------------------
+env = environ.Env()
+environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 
 # -------------------------------
@@ -63,11 +63,12 @@ THIRD_PARTY_APPS = [
     
     "drf_spectacular",
      
+    # "channels"      # For real-time features (WebSockets)
+
 ]
 
 CUSTOM_APPS = [
-    # "channels"      # For real-time features (WebSockets)
-
+    'apps.accounts',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
@@ -88,6 +89,10 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+
+    # Custom middleware to capture current user for audit fields in models
+    'kernel.middleware.current_user.CurrentUserMiddleware',
+
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
@@ -96,6 +101,7 @@ MIDDLEWARE = [
 # -------------------------------
 # URLs & WSGI/ASGI
 # -------------------------------
+# AUTH_USER_MODEL = "accounts.User" # Custom user model
 ROOT_URLCONF = 'engine.urls'
 WSGI_APPLICATION = 'engine.wsgi.application' 
 # ASGI_APPLICATION = 'engine.asgi.application'    # For real-time features (WebSockets)
@@ -122,23 +128,23 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # -------------------------------
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': env('POSTGRES_ENGINE'),
-        'NAME': env('POSTGRES_NAME'),
-        'USER': env('POSTGRES_USER'),
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'HOST': env('POSTGRES_HOST', default='db'),  # db service in docker-compose
-        'PORT': env('POSTGRES_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': env('POSTGRES_ENGINE'),
+#         'NAME': env('POSTGRES_NAME'),
+#         'USER': env('POSTGRES_USER'),
+#         'PASSWORD': env('POSTGRES_PASSWORD'),
+#         'HOST': env('POSTGRES_HOST', default='db'),  # db service in docker-compose
+#         'PORT': env('POSTGRES_PORT', default='5432'),
+#     }
+# }
 
 
 # -------------------------------
@@ -275,6 +281,8 @@ SECURE_REFERRER_POLICY = "same-origin"
 # -------------------------------
 # Logging
 # -------------------------------
+os.makedirs(BASE_DIR / "logs", exist_ok=True)
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
