@@ -38,6 +38,15 @@ CORS_ALLOW_ALL_ORIGINS = True # Allow all origins for development; change to Fal
 CORS_ALLOWED_ORIGINS = env.list("CORS_ALLOWED_ORIGINS", default=[])
 
 
+# Email Settings
+EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = env('EMAIL_HOST', default='localhost')
+EMAIL_PORT = env('EMAIL_PORT', default=25, cast=int)
+EMAIL_USE_TLS = env('EMAIL_USE_TLS', default=False, cast=bool)
+EMAIL_USE_SSL = env('EMAIL_USE_SSL', default=False, cast=bool)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+DEFAULT_FROM_EMAIL = "no-reply@example.com"
 
 # -------------------------------
 # Installed Apps
@@ -101,10 +110,33 @@ MIDDLEWARE = [
 # -------------------------------
 # URLs & WSGI/ASGI
 # -------------------------------
-# AUTH_USER_MODEL = "accounts.User" # Custom user model
+AUTH_USER_MODEL = "accounts.User" # Custom user model
 ROOT_URLCONF = 'engine.urls'
 WSGI_APPLICATION = 'engine.wsgi.application' 
 # ASGI_APPLICATION = 'engine.asgi.application'    # For real-time features (WebSockets)
+
+
+# -------------------------------
+# Registration
+# -------------------------------
+AUTO_LOGIN_AFTER_REGISTRATION = True # If True, user is automatically logged in after registration; otherwise, login is required manually
+
+# -------------------------------
+# OTP Base Login 
+# -------------------------------
+# If True, send OTP on every login; if False, send OTP only once after registration for initial email verification.
+AUTH_OTP_ENABLED = False
+
+OTP_EXPIRY_TIME = 300  # OTP expiry time in minutes
+OTP_RESEND_COOLDOWN = 60 # if otp created then again after 1 minute will be generate otp
+
+# -------------------------------
+# Forget Password Process
+# -------------------------------
+RESET_OTP_EXPIRY = 300
+RESET_TOKEN_EXPIRY = 600
+OTP_RESEND_COOLDOWN = 60  
+
 
 TEMPLATES = [
     {
@@ -128,23 +160,23 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # -------------------------------
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': env('POSTGRES_ENGINE'),
-#         'NAME': env('POSTGRES_NAME'),
-#         'USER': env('POSTGRES_USER'),
-#         'PASSWORD': env('POSTGRES_PASSWORD'),
-#         'HOST': env('POSTGRES_HOST', default='db'),  # db service in docker-compose
-#         'PORT': env('POSTGRES_PORT', default='5432'),
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': env('POSTGRES_ENGINE'),
+        'NAME': env('POSTGRES_NAME'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
+        'HOST': env('POSTGRES_HOST', default='db'),  # db service in docker-compose
+        'PORT': env('POSTGRES_PORT', default='5432'),
+    }
+}
 
 
 # -------------------------------
@@ -203,7 +235,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # ------------------------------- 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        # 'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'apps.accounts.authentication.PasswordAwareJWTAuthentication', # custome extended
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
@@ -224,6 +257,7 @@ REST_FRAMEWORK = {
     'DEFAULT_THROTTLE_RATES': {
         'anon': '50/day',
         'user': '500/day',
+        # 'forgot_password': '1/minute', 
     },
     
     # OpenAPI Schema Generation
@@ -235,8 +269,8 @@ REST_FRAMEWORK = {
  
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=12),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     
     'AUTH_HEADER_TYPES': ("Bearer",), 
     'USER_ID_FIELD': "id",
@@ -264,6 +298,14 @@ SIMPLE_JWT = {
 # -------------------------------
 # Cache (Redis)
 # -------------------------------
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "unique",
+    }
+}
+
 # CACHES = {
 #     "default": {
 #         "BACKEND": "django_redis.cache.RedisCache",

@@ -1,0 +1,178 @@
+
+### Registration
+POST http://localhost:8020/api/v1/accounts/register/  
+Content-Type: application/json
+
+{
+    "first_name": "AN",
+    "last_name": "Mamun",
+    "email": "anmamuncoder4@gmail.com",
+    "password": "securepassword123"
+}
+
+### Login
+POST http://localhost:8020/api/v1/accounts/login/
+Content-Type: application/json
+
+{
+    "email": "anmamuncoder@gmail.com",
+    "password": "123456789012"
+}
+
+### Token Refresh
+POST http://localhost:8020/api/v1/accounts/refresh/
+Content-Type: application/json
+
+{
+    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3NDM5MTg2OSwiaWF0IjoxNzczNzg3MDY5LCJqdGkiOiI2NGQwYWFhMGE2ZmQ0M2NhYWIzZjc0Nzg4MWViZTE0YyIsImlkIjoiOWE4MzljM2YtNjM5ZS00Zjg2LWFmNzUtYTU2MGQ2MDM3YTZkIn0.fihWs7Mbzx0VDhmkfM_twJojxwVc_jpcFfRdV_fC3EU"
+}
+
+### OTP Verification
+POST http://localhost:8020/api/v1/accounts/verify-otp/
+Content-Type: application/json
+
+{
+    "email": "anmamuncoder@gmail.com",
+    "otp": "332896"
+}
+
+### Resend OTP
+POST http://localhost:8020/api/v1/accounts/resend-otp/
+Content-Type: application/json
+
+{
+    "email": "anmamuncoder@gmail.com"
+}
+
+
+# -------------
+
+###  
+POST http://localhost:8020/api/v1/accounts/forgot-password/
+Content-Type: application/json
+
+{
+    "email": "anmamuncoder@gmail.com"
+}
+
+###  
+POST http://localhost:8020/api/v1/accounts/verify-reset-otp/
+Content-Type: application/json
+
+{
+    "email": "anmamuncoder@gmail.com",
+    "otp": "941378"
+}
+
+###  
+POST http://localhost:8020/api/v1/accounts/reset-password/
+Content-Type: application/json
+
+{
+    "reset_token": "jfBv8Kom4WvtNaDojVfjRUyJAOwG2r43phu5LE9K3U",
+    "new_password": "123456"
+}
+
+
+# -------------
+# Authentication:
+
+###
+PUT http://localhost:8020/api/v1/accounts/password/change/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzczOTE3MTc4LCJpYXQiOjE3NzM5MTYyNzgsImp0aSI6IjU1ZTA5OTg5NTNhZTRiNjBhYTMzZTE4NjQ3OGQwNDk3IiwiaWQiOiI5YTgzOWMzZi02MzllLTRmODYtYWY3NS1hNTYwZDYwMzdhNmQifQ.e5Sv0XSUSFwbPFogRhuuiSRw9ZsgUz6aO-ZHvZCu-mw
+Content-Type: application/json
+
+{
+    "current_password":"1234567890",
+    "new_password":"123456789012",
+    "confirm_password":"123456789012"
+}
+
+#success message:
+# {
+#   "success": true,
+#   "message": "Password updated successfully.",
+#   "data": null
+# }
+
+# current password is wrong if;
+# {
+#   "status": false,
+#   "errors": {
+#     "current_password": [
+#       "Current password is incorrect."
+#     ]
+#   }
+# }
+
+###
+POST http://localhost:8020/api/v1/accounts/email/change/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzczOTE3Mjg0LCJpYXQiOjE3NzM5MTYzODQsImp0aSI6IjZiMWY2MmVmMmM2YTQ3YThiODIwOGFhMTViOTc5ODQwIiwiaWQiOiI5YTgzOWMzZi02MzllLTRmODYtYWY3NS1hNTYwZDYwMzdhNmQifQ._UQjkE1a00djGipl-UCY66cpmEcf3Z49bb6VHRyO-Mc
+Content-Type: application/json
+
+{
+    "new_email":"anmamuncoder@gmail.com",
+    "password":"12345678"
+}
+
+# success message
+# {
+#   "success": true,
+#   "message": "OTP sent to anmamuncoder@gmail.com.",
+#   "data": null
+# }
+
+# error if same email:
+# {
+#   "status": false,
+#   "errors": {
+#     "new_email": [
+#       "New email must be different from current email."
+#     ]
+#   }
+# }
+# if wrong password:
+
+# {
+#   "status": false,
+#   "errors": {
+#     "password": [
+#       "Incorrect password."
+#     ]
+#   }
+# }
+# if use this email ayone 
+
+# {
+#   "status": false,
+#   "errors": {
+#     "new_email": [
+#       "This email is already in use."
+#     ]
+#   }
+# }
+
+
+###
+POST http://localhost:8020/api/v1/accounts/email/change/verify/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzczOTE0MzMwLCJpYXQiOjE3NzM5MTM0MzAsImp0aSI6IjIxN2MxOGE2NWYyNDQwMjg4NGVmYWIzMTBiYmE1MzAzIiwiaWQiOiI5YTgzOWMzZi02MzllLTRmODYtYWY3NS1hNTYwZDYwMzdhNmQifQ.adoj_CWaTFHQ4NHU1NOtqgOSB3ja6fp38SDNc4Jd21A
+Content-Type: application/json
+
+{
+    "otp":"09682"
+}
+
+# {
+#   "success": true,
+#   "message": "Email updated successfully.",
+#   "data": null
+# }
+
+# {
+#   "status": false,
+#   "errors": {
+#     "otp": [
+#       "Invalid OTP."
+#     ]
+#   }
+# }

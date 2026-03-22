@@ -1,0 +1,1 @@
+USERNOTFOUND="If an account exists for this email, a reset code has been sent."
