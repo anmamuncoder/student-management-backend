@@ -176,3 +176,123 @@ Content-Type: application/json
 #     ]
 #   }
 # }
+
+
+# --------------------------------------
+# Permissions  - Only Admin
+# --------------------------------------
+### admin
+GET http://localhost:8020/api/v1/rbac/permissions/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzcyMDQ2LCJpYXQiOjE3NzQzNzExNDYsImp0aSI6IjBkMWZiY2I3NzQ5OTQyNmE4NjkxNDE3MTg2YjVmZGI3IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.vdQw7_TQeD17z7frGvTipybl3YXgxMCv3s3lCaI-lrs
+
+
+### admin
+GET http://localhost:8020/api/v1/rbac/permissions/order:delete/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
+
+# {
+#   "id": "3096301b-5f43-42aa-9ea0-89966c239f1d",
+#   "slug": "order:delete",
+#   "name": "Delete order test",
+#   "resource": "order",
+#   "action": "delete",
+#   "description": "",
+#   "created_at": "2026-03-23T00:12:47.258577+06:00",
+#   "updated_at": "2026-03-24T15:25:03.821205+06:00"
+# }
+
+### admin
+PATCH  http://localhost:8020/api/v1/rbac/permissions/order:delete/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
+Content-Type: application/json
+
+{
+    "name":"Delete order test" 
+  
+}
+
+### admin
+PATCH  http://localhost:8020/api/v1/rbac/permissions/order:delete/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
+Content-Type: application/json
+
+{
+    "name":"Delete order test" 
+}
+
+
+# ---------------------------------
+# Roles - only for Admin
+# ---------------------------------
+
+### 
+GET http://localhost:8020/api/v1/rbac/roles/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzcyMDQ2LCJpYXQiOjE3NzQzNzExNDYsImp0aSI6IjBkMWZiY2I3NzQ5OTQyNmE4NjkxNDE3MTg2YjVmZGI3IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.vdQw7_TQeD17z7frGvTipybl3YXgxMCv3s3lCaI-lrs
+
+#   {
+#     "id": "71b00eaa-526f-48bc-be0e-795fe2194930",
+#     "name": "Editor",
+#     "slug": "editor",
+#     "permissions": [
+#       "order:create",
+#       "product:create",
+#       "product:update",
+#       "product:view"
+#     ],
+#     "description": "",
+#     "created_at": "2026-03-23T00:12:47.290573+06:00",
+#     "updated_at": "2026-03-24T01:33:34.241815+06:00"
+#   },
+
+###
+POST http://localhost:8020/api/v1/rbac/roles/ 
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
+Content-Type: application/json
+
+###
+PUT http://localhost:8020/api/v1/rbac/roles/slug/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
+Content-Type: application/json
+
+###
+GET  http://localhost:8020/api/v1/rbac/roles/editor/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
+
+###
+DELETE  http://localhost:8020/api/v1/rbac/roles/slug/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
+
+# ---------------------------------
+# UserRole - only for Admin
+# ---------------------------------
+GET http://localhost:8020/api/v1/rbac/user-roles/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ1NDgwLCJpYXQiOjE3NzQzNDQ1ODAsImp0aSI6IjQ0YjIyY2NlY2E0MzRmYjZhOGZlNTU3MjU1ZmZmODU3IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.kDW2V0l3-p-olOBSNB8o4Q91WZLFJ9bnwG38jIegIqQ
+
+### admin
+GET http://localhost:8020/api/v1/rbac/user-roles/ae6ecf0d-3a7d-4b56-bcfc-0beff9255ac6/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ1NDgwLCJpYXQiOjE3NzQzNDQ1ODAsImp0aSI6IjQ0YjIyY2NlY2E0MzRmYjZhOGZlNTU3MjU1ZmZmODU3IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.kDW2V0l3-p-olOBSNB8o4Q91WZLFJ9bnwG38jIegIqQ
+
+# {
+#   "id": "ae6ecf0d-3a7d-4b56-bcfc-0beff9255ac6",
+#   "user": "anmamuncoder@gmail.com",
+#   "role": "manager"
+# }
+
+### admin
+PATCH http://localhost:8020/api/v1/rbac/user-roles/ae6ecf0d-3a7d-4b56-bcfc-0beff9255ac6/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ1NDgwLCJpYXQiOjE3NzQzNDQ1ODAsImp0aSI6IjQ0YjIyY2NlY2E0MzRmYjZhOGZlNTU3MjU1ZmZmODU3IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.kDW2V0l3-p-olOBSNB8o4Q91WZLFJ9bnwG38jIegIqQ
+Content-Type: application/json
+
+{  
+    "role": "editor"
+}
+
+### admin
+POST http://localhost:8020/api/v1/rbac/user-roles/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ1NDgwLCJpYXQiOjE3NzQzNDQ1ODAsImp0aSI6IjQ0YjIyY2NlY2E0MzRmYjZhOGZlNTU3MjU1ZmZmODU3IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.kDW2V0l3-p-olOBSNB8o4Q91WZLFJ9bnwG38jIegIqQ
+Content-Type: application/json
+
+{  
+  "user": "anmamuncoder@gmail.com",
+  "role": "editor"
+}

@@ -78,6 +78,7 @@ THIRD_PARTY_APPS = [
 
 CUSTOM_APPS = [
     'apps.accounts',
+    'apps.rbac',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
@@ -101,6 +102,8 @@ MIDDLEWARE = [
 
     # Custom middleware to capture current user for audit fields in models
     'kernel.middleware.current_user.CurrentUserMiddleware',
+    # Middleware to enforce role-based permissions and access control (RBAC)
+    'kernel.middleware.permissions_middleware.RBACMiddleware',
 
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -350,6 +353,10 @@ LOGGING = {
     },
     'loggers': {
         'django': {'handlers': ['console', 'file'], 'level': 'INFO', 'propagate': True},
+        # 'rbac': {
+        #     'handlers': ['console'],
+        #     'level': 'WARNING',
+        # },
     },
 }
 
