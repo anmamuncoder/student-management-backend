@@ -7,7 +7,7 @@ build-backend = "hatchling.build"
 # Project Metadata
 # ---------------------------------------------------------------------------
 [project]
-name = "django-blackbox"
+name = "student-management"
 version = "1.0.0"
 description = "A scalable Django REST Framework base project with PostgreSQL, JWT auth, versioned API routing, Celery, and OpenAPI docs. Fully containerized with Docker."
 readme = "README.md"
@@ -107,7 +107,7 @@ test = [
 ]
 
 all = [
-    "django-blackbox[dev,test]",
+    "student-management[dev,test]",
 ]
 
 
@@ -116,8 +116,8 @@ all = [
 # ---------------------------------------------------------------------------
 [project.urls]
 Homepage     = "https://anmamuncoder.vercel.app/"
-Repository   = "https://github.com/anmamuncoder/django-blackbox"
-"Bug Tracker" = "https://github.com/anmamuncoder/django-blackbox/issues"
+Repository   = "https://github.com/anmamuncoder/student-management"
+"Bug Tracker" = "https://github.com/anmamuncoder/student-management/issues"
 
 
 # ---------------------------------------------------------------------------

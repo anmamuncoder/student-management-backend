@@ -1,4 +1,4 @@
-# Django REST API — Dockerized
+# Django REST API — Student Management Dockerized
 
 A scalable **Django REST Framework** backend with PostgreSQL, JWT auth, versioned API routing, and OpenAPI docs. Fully containerized with Docker.
 
