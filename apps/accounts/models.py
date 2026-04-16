@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from kernel.models import BaseModel
 
-from .constants import Gender
+from .constants import Gender, BloodGroup, MaritalStatus, Wing, CurrentStatus
 
 class UserManager(BaseUserManager):
 
@@ -107,10 +107,90 @@ class BaseUser(AbstractBaseUser, PermissionsMixin, BaseModel):
     def __str__(self):
         return self.email
 
-class User(BaseUser):
+class User(BaseUser):  
+    # -------------------------
+    # Identity
+    # -------------------------
+    personal_number = models.CharField(max_length=50, unique=True,null=True, blank=True)
 
-    photo = models.ImageField(upload_to="users/profile/", blank=True, null=True)
+    full_name = models.CharField(max_length=150, blank=True, null=True)
+    short_name = models.CharField(max_length=100, blank=True, null=True)
+
+    # -------------------------
+    # Rank / Role
+    # -------------------------
+    rank = models.ForeignKey("accounts.Rank", on_delete=models.SET_NULL, null=True, blank=True)
+  
+    # -------------------------
+    # Contact
+    # -------------------------
+    phone = models.CharField(max_length=20, blank=True, null=True)
+    email = models.EmailField(unique=True)
+    national_id = models.CharField(max_length=50, blank=True, null=True)
+
+    # -------------------------
+    # Personal Info
+    # -------------------------
+    gender = models.CharField(max_length=10,choices=Gender.choices,blank=True,null=True,)
+    blood_group = models.CharField(max_length=5, choices=BloodGroup.choices, blank=True, null=True,)
+    marital_status = models.CharField(max_length=20, choices=MaritalStatus.choices, null=True,)
+
+    date_of_marriage = models.DateField(blank=True, null=True)
+
+    # -------------------------
+    # Birth Info
+    # -------------------------
+    birth_date = models.DateField(blank=True, null=True)
+    place_of_birth = models.CharField(max_length=100, blank=True, null=True)
+    country = models.CharField(max_length=100, blank=True, null=True)
+
+    religion = models.CharField(max_length=50, blank=True, null=True)
+
+    # -------------------------
+    # Address
+    # -------------------------
+    present_address = models.TextField(blank=True, null=True)
+    permanent_address = models.TextField(blank=True, null=True)
+
+    # -------------------------
+    # Organization Info
+    # -------------------------
+    current_unit = models.CharField(max_length=100, blank=True, null=True)
+    parent_unit_auth = models.CharField(max_length=100, blank=True, null=True)
+
+    wing = models.CharField(max_length=20, choices=Wing.choices, blank=True, null=True,)
+
+    appointment = models.CharField(max_length=100, blank=True, null=True)
+
+    joining_date = models.DateField(blank=True, null=True)
+    date_of_enrolment = models.DateField(blank=True, null=True)
+
+    current_status = models.CharField(max_length=20, choices=CurrentStatus.choices, default=CurrentStatus.ACTIVE, blank=True, null=True,)
+
+    # -------------------------
+    # Files
+    # -------------------------
+    photo = models.ImageField(upload_to="users/photos/", blank=True, null=True)
+    resume = models.FileField(upload_to="users/resume/", blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.email} "
 
     class Meta:
         db_table = "users"
+
+class Rank(BaseModel):
+    code = models.CharField(max_length=20, unique=True)  
+    name = models.CharField(max_length=100)              
+    order = models.PositiveIntegerField(default=0)     
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return self.name
+
+
+
 

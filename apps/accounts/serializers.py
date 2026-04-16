@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import authenticate
-from .models import User
+from .models import Rank, User
 from django.conf import settings
 
 # ----------------------------------------
@@ -157,3 +157,66 @@ class EmailChangeVerifySerializer(serializers.Serializer):
         if user.email_change_otp != value:
             raise serializers.ValidationError("Invalid OTP.")
         return value
+
+
+# ----------------------------------------
+# Rank Serializer
+# ----------------------------------------
+class RankSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rank
+        fields = "__all__"
+
+
+class UserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(write_only=True, required=True)
+    role_slug = serializers.CharField(write_only=True, required=False)
+
+    user_role = serializers.SerializerMethodField(read_only=True)
+    class Meta:
+        model = User
+        fields = [
+            "id",
+            "personal_number",
+            "full_name",
+            "short_name",
+            "email",
+            "phone",
+            "password",
+            "role_slug",
+            "user_role" 
+        ]
+
+    def get_user_role(self, obj):
+        roles = [ur.role.slug for ur in obj.user_roles.all()]
+
+        if hasattr(obj, "student"):
+            roles.append("student")
+
+        return roles
+    
+    def create(self, validated_data):
+        password = validated_data.pop("password", None)
+        role_slug = validated_data.pop("role_slug", None)
+
+        user = User(**validated_data)
+
+        if password:
+            user.set_password(password)
+
+        user.save()
+
+        # assign role
+        if role_slug:
+            from .models import Role, UserRole
+            role = Role.objects.get(slug=role_slug)
+            UserRole.objects.create(user=user, role=role)
+
+        return user
+
+    def update(self, instance, validated_data):
+        # BLOCK password update
+        validated_data.pop("password", None)
+
+        return super().update(instance, validated_data)

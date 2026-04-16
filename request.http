@@ -1,3 +1,25 @@
+# Authentication
+POST http://localhost:8020/api/v1/accounts/login/
+POST http://localhost:8020/api/v1/accounts/refresh/
+POST http://localhost:8020/api/v1/accounts/verify-otp/
+POST http://localhost:8020/api/v1/accounts/resend-otp/
+POST http://localhost:8020/api/v1/accounts/forgot-password/
+POST http://localhost:8020/api/v1/accounts/verify-reset-otp/
+POST http://localhost:8020/api/v1/accounts/reset-password/
+PUT http://localhost:8020/api/v1/accounts/password/change/
+
+# Permissions
+ALL_METHOD http://localhost:8020/api/v1/rbac/roles/ 
+GET http://localhost:8020/api/v1/rbac/permissions/
+
+
+# Roles
+ALL_METHOD http://localhost:8020/api/v1/accounts/ranks/
+ALL_METHOD http://localhost:8020/api/v1/accounts/users/
+
+
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4NTIwODcyLCJpYXQiOjE3NzU5Mjg4NzIsImp0aSI6IjJmNmQ5Yzg1NTYxMzQ3MmE4OGM1Y2ZkZTFjOGRkMjExIiwiaWQiOiJiNGNmNGVjNy02YWM5LTRkM2ItYmNhNS0xZDc1NGFlMmE1ODcifQ.Nmg00o7gxSdyJTlYqZr9nlMBNkrCozkVZs6BB-s39dc
+
 
 ### Registration
 POST http://localhost:8020/api/v1/accounts/register/  
@@ -6,7 +28,7 @@ Content-Type: application/json
 {
     "first_name": "AN",
     "last_name": "Mamun",
-    "email": "anmamuncoder4@gmail.com",
+    "email": "anmamuncoder@gmail.com",
     "password": "securepassword123"
 }
 
@@ -15,8 +37,8 @@ POST http://localhost:8020/api/v1/accounts/login/
 Content-Type: application/json
 
 {
-    "email": "anmamuncoder@gmail.com",
-    "password": "123456789012"
+    "email": "admin@gmail.com",
+    "password": "123"
 }
 
 ### Token Refresh
@@ -24,7 +46,7 @@ POST http://localhost:8020/api/v1/accounts/refresh/
 Content-Type: application/json
 
 {
-    "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3NDM5MTg2OSwiaWF0IjoxNzczNzg3MDY5LCJqdGkiOiI2NGQwYWFhMGE2ZmQ0M2NhYWIzZjc0Nzg4MWViZTE0YyIsImlkIjoiOWE4MzljM2YtNjM5ZS00Zjg2LWFmNzUtYTU2MGQ2MDM3YTZkIn0.fihWs7Mbzx0VDhmkfM_twJojxwVc_jpcFfRdV_fC3EU"
+     "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc3ODUxOTQxMSwiaWF0IjoxNzc1OTI3NDExLCJqdGkiOiJkMGFhMDJjYTE1ZGI0OTMzOGIzNjY5NjQxNDAzYjQ5OSIsImlkIjoiYjRjZjRlYzctNmFjOS00ZDNiLWJjYTUtMWQ3NTRhZTJhNTg3In0.Fq88aHyPUZPAlhCPgs44L6wOsje-0towNjhDpUOsfRQ"
 }
 
 ### OTP Verification
@@ -33,7 +55,7 @@ Content-Type: application/json
 
 {
     "email": "anmamuncoder@gmail.com",
-    "otp": "332896"
+    "otp": "590240"
 }
 
 ### Resend OTP
@@ -61,7 +83,7 @@ Content-Type: application/json
 
 {
     "email": "anmamuncoder@gmail.com",
-    "otp": "941378"
+    "otp": "433191"
 }
 
 ###  
@@ -69,8 +91,8 @@ POST http://localhost:8020/api/v1/accounts/reset-password/
 Content-Type: application/json
 
 {
-    "reset_token": "jfBv8Kom4WvtNaDojVfjRUyJAOwG2r43phu5LE9K3U",
-    "new_password": "123456"
+    "reset_token": "StrpPRUp3XAGUTCZdzsMNX6vTPa0ht3nk6Myj0xe7Pg",
+    "new_password": "123456789"
 }
 
 
@@ -79,7 +101,7 @@ Content-Type: application/json
 
 ###
 PUT http://localhost:8020/api/v1/accounts/password/change/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzczOTE3MTc4LCJpYXQiOjE3NzM5MTYyNzgsImp0aSI6IjU1ZTA5OTg5NTNhZTRiNjBhYTMzZTE4NjQ3OGQwNDk3IiwiaWQiOiI5YTgzOWMzZi02MzllLTRmODYtYWY3NS1hNTYwZDYwMzdhNmQifQ.e5Sv0XSUSFwbPFogRhuuiSRw9ZsgUz6aO-ZHvZCu-mw
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc3ODg5OTY2LCJpYXQiOjE3NzUyOTc5NjYsImp0aSI6IjVmNGI5Mjc3Nzk5YzQxY2JhYjI2ZGNmYTA1MDIwNmFlIiwiaWQiOiI0M2M4NGYyMC1mNDU5LTRmN2QtOTJhMy03ZDViNzc2NTNjMDAifQ.vVN79GblndwBXvbhiplmZ7lh2QBU6CcJM51mBV5AUE4
 Content-Type: application/json
 
 {
@@ -107,12 +129,12 @@ Content-Type: application/json
 
 ###
 POST http://localhost:8020/api/v1/accounts/email/change/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzczOTE3Mjg0LCJpYXQiOjE3NzM5MTYzODQsImp0aSI6IjZiMWY2MmVmMmM2YTQ3YThiODIwOGFhMTViOTc5ODQwIiwiaWQiOiI5YTgzOWMzZi02MzllLTRmODYtYWY3NS1hNTYwZDYwMzdhNmQifQ._UQjkE1a00djGipl-UCY66cpmEcf3Z49bb6VHRyO-Mc
+Authorization:  Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "new_email":"anmamuncoder@gmail.com",
-    "password":"12345678"
+    "new_email":"fokhrul.dev@gmail.com",
+    "password":"123456789"
 }
 
 # success message
@@ -155,11 +177,11 @@ Content-Type: application/json
 
 ###
 POST http://localhost:8020/api/v1/accounts/email/change/verify/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzczOTE0MzMwLCJpYXQiOjE3NzM5MTM0MzAsImp0aSI6IjIxN2MxOGE2NWYyNDQwMjg4NGVmYWIzMTBiYmE1MzAzIiwiaWQiOiI5YTgzOWMzZi02MzllLTRmODYtYWY3NS1hNTYwZDYwMzdhNmQifQ.adoj_CWaTFHQ4NHU1NOtqgOSB3ja6fp38SDNc4Jd21A
+Authorization:  Bearer {{access_token}}
 Content-Type: application/json
 
 {
-    "otp":"09682"
+    "otp":"373579"
 }
 
 # {
@@ -177,19 +199,18 @@ Content-Type: application/json
 #   }
 # }
 
+@superuser_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4NTIxMDM3LCJpYXQiOjE3NzU5MjkwMzcsImp0aSI6ImRmYWZmNmRlMzE5ZjRmOGNiNmMzNTA3NDIwZWFjNWE1IiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.1bSSC23Gbl3OJ6A5R3EEJmjuALeKK7dBEHs1XwNrz0k
 
 # --------------------------------------
 # Permissions  - Only Admin
 # --------------------------------------
 ### admin
-GET http://localhost:8020/api/v1/rbac/permissions/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzcyMDQ2LCJpYXQiOjE3NzQzNzExNDYsImp0aSI6IjBkMWZiY2I3NzQ5OTQyNmE4NjkxNDE3MTg2YjVmZGI3IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.vdQw7_TQeD17z7frGvTipybl3YXgxMCv3s3lCaI-lrs
-
+GET http://localhost:8020/api/v1/rbac/permissions/self/
+Authorization:  Bearer {{access_token}}
 
 ### admin
-GET http://localhost:8020/api/v1/rbac/permissions/order:delete/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
-
+GET http://localhost:8020/api/v1/rbac/permissions/accounts_ranks:create/
+Authorization:  Bearer {{superuser_token}}
 # {
 #   "id": "3096301b-5f43-42aa-9ea0-89966c239f1d",
 #   "slug": "order:delete",
@@ -225,9 +246,11 @@ Content-Type: application/json
 # Roles - only for Admin
 # ---------------------------------
 
+
 ### 
 GET http://localhost:8020/api/v1/rbac/roles/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzcyMDQ2LCJpYXQiOjE3NzQzNzExNDYsImp0aSI6IjBkMWZiY2I3NzQ5OTQyNmE4NjkxNDE3MTg2YjVmZGI3IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.vdQw7_TQeD17z7frGvTipybl3YXgxMCv3s3lCaI-lrs
+Authorization:  Bearer {{access_token}}
+
 
 #   {
 #     "id": "71b00eaa-526f-48bc-be0e-795fe2194930",
@@ -250,9 +273,8 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
 Content-Type: application/json
 
 ###
-PUT http://localhost:8020/api/v1/rbac/roles/slug/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
-Content-Type: application/json
+GET http://localhost:8020/api/v1/rbac/roles/teacher/
+Authorization:  Bearer {{superuser_token}}
 
 ###
 GET  http://localhost:8020/api/v1/rbac/roles/editor/
@@ -296,3 +318,76 @@ Content-Type: application/json
   "user": "anmamuncoder@gmail.com",
   "role": "editor"
 }
+
+### admin
+GET http://localhost:8020/api/v1/rbac/user-roles-assign/
+Authorization:  Bearer {{superuser_token}}
+ 
+
+### admin
+POST  http://localhost:8020/api/v1/rbac/user-roles-assign/
+Authorization:  Bearer {{superuser_token}}
+Content-Type: application/json
+
+{
+    "user": "anmamuncoder@gmail.com",
+    "role": "teacher"
+}
+
+### admin
+PATCH   http://localhost:8020/api/v1/rbac/user-roles-assign/a56a30a6-f86a-4ea4-b891-6e1d5d50ad06/
+Authorization:  Bearer {{superuser_token}}
+Content-Type: application/json
+
+{ 
+    "role": "librarian"
+}
+
+
+# ---------------------------------
+# User Ranks
+# ---------------------------------
+###
+GET http://localhost:8020/api/v1/students/students/
+Authorization:  Bearer {{superuser_token}}
+
+### BASE URL
+@studentUrl = http://127.0.0.1:8000/api/v1/students
+
+@admin-token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4MTgyNTQ0LCJpYXQiOjE3NzU1OTA1NDQsImp0aSI6ImQ2NTk0YzVkNTgyZTQwMWE4YmFjYTM1OWY2MjhhZGQ4IiwiaWQiOiI0ZWViMzc1YS1kNzBjLTQ2ODMtODk5YS1kZWFlYzFmZmM0YjEifQ.PVwkA6Y0Wd8gQN1Dwc10AgZ5itmGchfunTABUkUnXwI
+
+ 
+ 
+# Permissions
+ALL_METHOD http://localhost:8020/api/v1/rbac/roles/ 
+GET http://localhost:8020/api/v1/rbac/permissions/
+
+
+# Roles
+ALL_METHOD http://localhost:8020/api/v1/accounts/ranks/
+ALL_METHOD http://localhost:8020/api/v1/accounts/users/
+
+# Student Related
+ALL http://localhost:8020/api/v1/students/students/
+ALL http://localhost:8020/api/v1/students/student-types/
+ALL http://localhost:8020/api/v1/students/student-groups/
+ALL http://localhost:8020/api/v1/students/activities/
+ALL http://localhost:8020/api/v1/students/spouses/
+ALL http://localhost:8020/api/v1/students/qualifications/
+ALL http://localhost:8020/api/v1/students/bank-accounts/
+ALL http://localhost:8020/api/v1/students/military-qualifications/
+ALL http://localhost:8020/api/v1/students/service-records/
+ALL http://localhost:8020/api/v1/students/awards/
+ALL http://localhost:8020/api/v1/students/un-missions/
+ALL http://localhost:8020/api/v1/students/countries-visited/
+
+
+# Courses 
+ 
+ALL http://localhost:8020/api/v1/courses/courses/
+ALL http://localhost:8020/api/v1/courses/subjects/
+ALL http://localhost:8020/api/v1/courses/modules/
+ALL http://localhost:8020/api/v1/courses/syllabus/
+ALL http://localhost:8020/api/v1/courses/detail-syllabus/
+ALL http://localhost:8020/api/v1/courses/batches/
+

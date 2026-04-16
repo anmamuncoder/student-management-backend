@@ -1,5 +1,6 @@
 import django 
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 
 from .views import (
     RegisterAPIView,
@@ -14,8 +15,15 @@ from .views import (
 
     EmailChangeRequestView, 
     EmailChangeVerifyView,
-    PasswordChangeView
+    PasswordChangeView,
+
+    RankViewSet,
+    UserViewSet,
 )
+
+router = DefaultRouter()
+router.register(r'ranks', RankViewSet, basename='ranks')
+router.register(r'users', UserViewSet, basename='users')
  
 
 app_name = 'accounts'
@@ -38,7 +46,7 @@ urlpatterns = [
     path('email/change/', EmailChangeRequestView.as_view(), name='email-change-request'),
     path('email/change/verify/', EmailChangeVerifyView.as_view(), name='email-change-verify'),
 
-]
+] + router.urls
 
 # /api/v1/accounts/password/change/
 # /api/v1/accounts/email/change/

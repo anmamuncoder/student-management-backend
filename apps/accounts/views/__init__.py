@@ -8,3 +8,4 @@ from .forget import ForgotPasswordAPIView, VerifyResetOTPAPIView, ResetPasswordA
 
 from .email import EmailChangeRequestView, EmailChangeVerifyView
 from .password import PasswordChangeView
+from .ranks import RankViewSet, UserViewSet

@@ -79,6 +79,9 @@ THIRD_PARTY_APPS = [
 CUSTOM_APPS = [
     'apps.accounts',
     'apps.rbac',
+    'apps.student',
+    'apps.course',
+
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
@@ -163,23 +166,23 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # -------------------------------
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': env('POSTGRES_ENGINE'),
-        'NAME': env('POSTGRES_NAME'),
-        'USER': env('POSTGRES_USER'),
-        'PASSWORD': env('POSTGRES_PASSWORD'),
-        'HOST': env('POSTGRES_HOST', default='db'),  # db service in docker-compose
-        'PORT': env('POSTGRES_PORT', default='5432'),
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': env('POSTGRES_ENGINE'),
+#         'NAME': env('POSTGRES_NAME'),
+#         'USER': env('POSTGRES_USER'),
+#         'PASSWORD': env('POSTGRES_PASSWORD'),
+#         'HOST': env('POSTGRES_HOST', default='db'),  # db service in docker-compose
+#         'PORT': env('POSTGRES_PORT', default='5432'),
+#     }
+# }
 
 
 # -------------------------------
@@ -272,8 +275,8 @@ REST_FRAMEWORK = {
  
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
     
     'AUTH_HEADER_TYPES': ("Bearer",), 
     'USER_ID_FIELD': "id",
