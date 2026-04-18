@@ -46,7 +46,7 @@ class StudentGroupViewSet(BaseViewSet):
 # Student
 # ----------------------------
 class StudentViewSet(BaseViewSet):
-    queryset = Student.objects.all()
+    queryset = Student.objects.all().order_by('index_no')
     serializer_class = StudentSerializer
 
 

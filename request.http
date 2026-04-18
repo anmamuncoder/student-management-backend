@@ -18,8 +18,7 @@ ALL_METHOD http://localhost:8020/api/v1/accounts/ranks/
 ALL_METHOD http://localhost:8020/api/v1/accounts/users/
 
 
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4NTIwODcyLCJpYXQiOjE3NzU5Mjg4NzIsImp0aSI6IjJmNmQ5Yzg1NTYxMzQ3MmE4OGM1Y2ZkZTFjOGRkMjExIiwiaWQiOiJiNGNmNGVjNy02YWM5LTRkM2ItYmNhNS0xZDc1NGFlMmE1ODcifQ.Nmg00o7gxSdyJTlYqZr9nlMBNkrCozkVZs6BB-s39dc
-
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4OTU4NzIzLCJpYXQiOjE3NzYzNjY3MjMsImp0aSI6ImE1YjIxZWMzYTI5YTQ3YjZhN2RmYWU4ODIwYzEzMjY3IiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.b7ISD8b3NRqPKsughR1a6t-pt1bJZXS1X1yHgfQ60Ck
 
 ### Registration
 POST http://localhost:8020/api/v1/accounts/register/  
@@ -31,9 +30,131 @@ Content-Type: application/json
     "email": "anmamuncoder@gmail.com",
     "password": "securepassword123"
 }
+###
+GET https://backend.dipstick.xyz/api/v1/students/student-types/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5MDkyOTcxLCJpYXQiOjE3NzY1MDA5NzIsImp0aSI6ImI2MjljM2Y5ZTMwYjRiNDZhMmM2NDY2ZWI0MGQ4NGZiIiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.CkUCY5Xf5NAblk7YkcGfqRRWzX4tTl2FCL_ShPxQPJc
+
+###
+GET https://backend.dipstick.xyz/api/v1/accounts/users/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5MDkyOTcxLCJpYXQiOjE3NzY1MDA5NzIsImp0aSI6ImI2MjljM2Y5ZTMwYjRiNDZhMmM2NDY2ZWI0MGQ4NGZiIiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.CkUCY5Xf5NAblk7YkcGfqRRWzX4tTl2FCL_ShPxQPJc
+ 
+###
+GET https://backend.dipstick.xyz/api/v1/students/students/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5MDkyOTcxLCJpYXQiOjE3NzY1MDA5NzIsImp0aSI6ImI2MjljM2Y5ZTMwYjRiNDZhMmM2NDY2ZWI0MGQ4NGZiIiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.CkUCY5Xf5NAblk7YkcGfqRRWzX4tTl2FCL_ShPxQPJc
+ 
+
+###
+POST https://backend.dipstick.xyz/api/v1/accounts/users/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5MDkyOTcxLCJpYXQiOjE3NzY1MDA5NzIsImp0aSI6ImI2MjljM2Y5ZTMwYjRiNDZhMmM2NDY2ZWI0MGQ4NGZiIiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.CkUCY5Xf5NAblk7YkcGfqRRWzX4tTl2FCL_ShPxQPJc
+Content-Type: application/json
+
+{
+  "email": "student.demo@example.com",
+  "password": "Test@1234",
+  "full_name": "Demo Student",
+  "short_name": "Student",
+  "phone": "01722222222",
+  "personal_number": "STU-1001",
+
+  "gender": "male",
+  "blood_group": "O+",
+  "marital_status": "single",
+
+  "birth_date": "2005-06-15",
+  "place_of_birth": "Dhaka",
+  "country": "Bangladesh",
+
+  "present_address": "Dhaka",
+  "permanent_address": "Noakhali",
+
+  "wing": "civil",  
+
+  "joining_date": "2026-04-14",
+  "date_of_enrolment": "2026-04-14",
+  "current_status": "active" 
+}
+
+
+
+
+###
+GET https://backend.dipstick.xyz/api/v1/students/students/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5MDkyOTcxLCJpYXQiOjE3NzY1MDA5NzIsImp0aSI6ImI2MjljM2Y5ZTMwYjRiNDZhMmM2NDY2ZWI0MGQ4NGZiIiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.CkUCY5Xf5NAblk7YkcGfqRRWzX4tTl2FCL_ShPxQPJc
+Content-Type: application/json
+
+{
+  "user": "98f61a3e-85c1-486e-9088-ff62a3f1d8ac",
+
+  "second_language": "English",
+  "date_of_commission": "2026-04-14",
+  "date_of_joining_accs": "2026-04-14",
+
+  "father_full_name": "Hello Father",
+  "father_phone": "01712345678",
+  "father_address": "Sylhet",
+  "father_profession": "Professor",
+
+  "mother_full_name": "Hello Mother",
+  "mother_phone": "01798765432",
+  "mother_address": "Sylhet",
+  "mother_profession": "Housewife",
+
+  "passport_number": "A18205212",
+  "passport_issue_date": "2026-04-14",
+  "passport_place": "Dhaka",
+  "passport_expiry_date": "2030-04-14",
+
+  "health_condition": "Good",
+  "other_info": "N/A",
+
+  "is_active": false,
+  "index_no": 1,
+
+  "student_type": "6e9e3af2-c1eb-42ae-b850-900df3c984de",    
+  "batch": "6cf906ea-9f02-4464-8db7-0d8bd522a2ea"           
+}
+
+
+
+###
+POST https://backend.dipstick.xyz/api/v1/accounts/users/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5MDkyOTcxLCJpYXQiOjE3NzY1MDA5NzIsImp0aSI6ImI2MjljM2Y5ZTMwYjRiNDZhMmM2NDY2ZWI0MGQ4NGZiIiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.CkUCY5Xf5NAblk7YkcGfqRRWzX4tTl2FCL_ShPxQPJc
+Content-Type: application/json
+
+{
+  "email": "staff.demo@example.com",
+  "password": "Test@1234",
+  "full_name": "Demo Staff",
+  "short_name": "Staff You",
+  "phone": "01711111111",
+  "personal_number": "PN-2001",
+
+  "rank": "f7e64226-7174-4311-898f-5ddf489bbc44",
+  "gender": "male",
+  "blood_group": "B+",
+  "marital_status": "married",
+
+  "birth_date": "1990-01-01",
+  "place_of_birth": "Dhaka",
+  "country": "Bangladesh",
+
+  "present_address": "Dhaka",
+  "permanent_address": "Khulna",
+
+  "current_unit": 1,
+  "wing": "army",
+  "appointment": 1,
+
+  "joining_date": "2026-04-14",
+  "date_of_enrolment": "2026-04-14",
+  "current_status": "active",
+
+  "role_slug": "staff"
+}
+
 
 ### Login
-POST http://localhost:8020/api/v1/accounts/login/
+POST http://backend.dipstick.xyz/api/v1/accounts/login/
 Content-Type: application/json
 
 {
@@ -205,8 +326,8 @@ Content-Type: application/json
 # Permissions  - Only Admin
 # --------------------------------------
 ### admin
-GET http://localhost:8020/api/v1/rbac/permissions/self/
-Authorization:  Bearer {{access_token}}
+GET http://localhost:8020/api/v1/accounts/users/
+Authorization:  Bearer {{superuser_token}}
 
 ### admin
 GET http://localhost:8020/api/v1/rbac/permissions/accounts_ranks:create/
@@ -390,4 +511,18 @@ ALL http://localhost:8020/api/v1/courses/modules/
 ALL http://localhost:8020/api/v1/courses/syllabus/
 ALL http://localhost:8020/api/v1/courses/detail-syllabus/
 ALL http://localhost:8020/api/v1/courses/batches/
+
+
+
+
+# Exams Module
+http://localhost:8020/api/v1/exams/exam-grades/
+http://localhost:8020/api/v1/exams/exam-schedules/
+http://localhost:8020/api/v1/exams/exams/
+http://localhost:8020/api/v1/exams/exam-attendance/
+
+# Time Tables Module
+
+http://localhost:8020/api/v1/time_tables/govt-holidays/
+http://localhost:8020/api/v1/time_tables/training-schedules/
 

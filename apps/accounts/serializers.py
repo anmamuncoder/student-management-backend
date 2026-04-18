@@ -177,15 +177,70 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
+            # -------------------------
+            # Identity
+            # -------------------------
             "id",
             "personal_number",
             "full_name",
             "short_name",
+
+            # -------------------------
+            # Contact
+            # -------------------------
             "email",
             "phone",
+            "national_id",
+
+            # -------------------------
+            # Rank / Role
+            # -------------------------
+            "rank",
+
+            # -------------------------
+            # Personal Info
+            # -------------------------
+            "gender",
+            "blood_group",
+            "marital_status",
+            "date_of_marriage",
+
+            # -------------------------
+            # Birth Info
+            # -------------------------
+            "birth_date",
+            "place_of_birth",
+            "country",
+            "religion",
+
+            # -------------------------
+            # Address
+            # -------------------------
+            "present_address",
+            "permanent_address",
+
+            # -------------------------
+            # Organization Info
+            # -------------------------
+            "current_unit",
+            "parent_unit_auth",
+            "wing",
+            "appointment",
+            "joining_date",
+            "date_of_enrolment",
+            "current_status",
+
+            # -------------------------
+            # Files
+            # -------------------------
+            "photo",
+            "resume",
+            # -------------------------
+            # Auth / Extra
+            # -------------------------
             "password",
             "role_slug",
-            "user_role" 
+            "user_role",
         ]
 
     def get_user_role(self, obj):
@@ -209,7 +264,7 @@ class UserSerializer(serializers.ModelSerializer):
 
         # assign role
         if role_slug:
-            from .models import Role, UserRole
+            from apps.rbac.models import Role, UserRole
             role = Role.objects.get(slug=role_slug)
             UserRole.objects.create(user=user, role=role)
 

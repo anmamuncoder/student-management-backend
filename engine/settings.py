@@ -81,6 +81,9 @@ CUSTOM_APPS = [
     'apps.rbac',
     'apps.student',
     'apps.course',
+    'apps.exam',
+    'apps.time_table',
+
 
 ]
 

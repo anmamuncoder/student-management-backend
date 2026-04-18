@@ -18,6 +18,8 @@ class Student(BaseModel):
     # Academic Info
     # -------------------------
     student_type = models.ForeignKey("StudentType", on_delete=models.SET_NULL, null=True, blank=True)
+    batch = models.ForeignKey(Batch, on_delete=models.SET_NULL, null=True, blank=True)
+
     second_language = models.CharField(max_length=50, blank=True, null=True)
 
     date_of_commission = models.DateField(null=True, blank=True)
@@ -52,6 +54,8 @@ class Student(BaseModel):
 
 
     is_active = models.BooleanField(default=False)
+    
+    index_no = models.PositiveIntegerField(default=0,null=True,blank=True)
 
     def __str__(self):
         return self.user.email

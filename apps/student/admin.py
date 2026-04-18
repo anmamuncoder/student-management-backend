@@ -44,9 +44,9 @@ class ServiceRecordInline(admin.TabularInline):
 # ----------------------------
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('get_full_name', 'get_email', 'student_type', 'is_active', 'date_of_joining_accs')
-    list_filter = ('is_active', 'student_type')
-    search_fields = ('user__full_name', 'user__email', 'passport_number')
+    list_display = ('get_full_name', 'get_email', 'student_type', 'is_active','index_no','date_of_joining_accs')
+    list_filter = ('is_active', 'student_type','batch')
+    search_fields = ('user__full_name', 'user__email', 'passport_number',)
     readonly_fields = ('created_at', 'updated_at')
     list_select_related = ('user', 'student_type')
 
@@ -64,7 +64,10 @@ class StudentAdmin(admin.ModelAdmin):
         }),
         ('Academic Info', {
             'fields': (
-                'student_type', 'second_language',
+                'student_type', 
+                'batch',
+                'index_no',
+                'second_language',
                 'date_of_commission', 'date_of_joining_accs',
             )
         }),
