@@ -30,6 +30,8 @@ CSRF_TRUSTED_ORIGINS = [
     # Add your frontend URLs here
     "http://localhost:5173",    # For development with Vite React
     "http://127.0.0.1:5173",    # For development with Vite React
+    'http://192.168.110.2:80/',
+    'http://192.168.110.2:81/',
     
     # Add production frontend & backend URL when deploying
      
@@ -178,6 +180,38 @@ DATABASES = {
 
 # DATABASES = {
 #     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'dipstick_backend_db',
+#         'USER': 'dipstick_django',
+#         'PASSWORD': 'djangoPass@123',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': env("DB_NAME"),
+#         'USER': env("DB_USER"),
+#         'PASSWORD': env("DB_PASSWORD"),
+#         'HOST': env("DB_HOST", default="localhost"),
+#         'PORT': env("DB_PORT", default="3306"),
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'dipstick_db',
+#         'USER': 'django_user',
+#         'PASSWORD': '1234',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
 #         'ENGINE': env('POSTGRES_ENGINE'),
 #         'NAME': env('POSTGRES_NAME'),
 #         'USER': env('POSTGRES_USER'),
@@ -231,14 +265,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 TEMPLATES[0]['DIRS'] = [
-    BASE_DIR / 'frontend'
+    BASE_DIR / 'frontend/templates'
 ]
 
 STATICFILES_DIRS = [
-    BASE_DIR / 'frontend/assets',
-    BASE_DIR / 'frontend/img',   
+    BASE_DIR / 'frontend/static',
 ]
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

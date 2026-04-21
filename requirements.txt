@@ -101,3 +101,7 @@ attrs==25.4.0
 user-agents==2.2.0 # Parses the User-Agent string to identify device type, browser, and operating system.
 geoip2==5.2.0 # Converts an IP address into geographic data like country and city for location tracking.
 
+
+# For MySQL support, if needed in the future:
+# django<4.2
+# PyMySQL==1.1.2
