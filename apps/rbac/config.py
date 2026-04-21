@@ -36,6 +36,17 @@ URL_PERMISSION_MAP = [
     (r'/api/v1/courses/syllabus/', 'courses_syllabus'), # All Method
     (r'/api/v1/courses/detail-syllabus/', 'courses_detail_syllabus'), # All Method
     (r'/api/v1/courses/batches/', 'courses_batches'), # All Method
+
+
+    # Exams Module  
+    (r'/api/v1/exams/exams/', 'exams'),
+    (r'/api/v1/exams/exam-grades/', 'exams_grades'),
+    (r'/api/v1/exams/exam-schedules/', 'exams_schedules'),
+    (r'/api/v1/exams/exam-attendance/', 'exams_attendance'),
+
+    # Time Tables Module 
+    (r'/api/v1/time_tables/govt-holidays/', 'time_tables_govt_holidays'),
+    (r'/api/v1/time_tables/training-schedules/', 'time_tables_training_schedules'),
 ]
 
 
@@ -232,6 +243,54 @@ INITIAL_PERMISSIONS = [
     {'name': 'Create batches', 'resource': 'courses_batches', 'action': 'create', 'slug': 'courses_batches:create'},
     {'name': 'Update batches', 'resource': 'courses_batches', 'action': 'update', 'slug': 'courses_batches:update'},
     {'name': 'Delete batches', 'resource': 'courses_batches', 'action': 'delete', 'slug': 'courses_batches:delete'},
+
+
+
+    # --------------------------
+    # EXAMS
+    # --------------------------
+
+    # exams
+    {'name': 'View exams',   'resource': 'exams', 'action': 'view',   'slug': 'exams:view'},
+    {'name': 'Create exams', 'resource': 'exams', 'action': 'create', 'slug': 'exams:create'},
+    {'name': 'Update exams', 'resource': 'exams', 'action': 'update', 'slug': 'exams:update'},
+    {'name': 'Delete exams', 'resource': 'exams', 'action': 'delete', 'slug': 'exams:delete'},
+
+    # exams_grades
+    {'name': 'View exam grades',   'resource': 'exams_grades', 'action': 'view',   'slug': 'exams_grades:view'},
+    {'name': 'Create exam grades', 'resource': 'exams_grades', 'action': 'create', 'slug': 'exams_grades:create'},
+    {'name': 'Update exam grades', 'resource': 'exams_grades', 'action': 'update', 'slug': 'exams_grades:update'},
+    {'name': 'Delete exam grades', 'resource': 'exams_grades', 'action': 'delete', 'slug': 'exams_grades:delete'},
+
+    # exams_schedules
+    {'name': 'View exam schedules',   'resource': 'exams_schedules', 'action': 'view',   'slug': 'exams_schedules:view'},
+    {'name': 'Create exam schedules', 'resource': 'exams_schedules', 'action': 'create', 'slug': 'exams_schedules:create'},
+    {'name': 'Update exam schedules', 'resource': 'exams_schedules', 'action': 'update', 'slug': 'exams_schedules:update'},
+    {'name': 'Delete exam schedules', 'resource': 'exams_schedules', 'action': 'delete', 'slug': 'exams_schedules:delete'},
+
+    # exams_attendance
+    {'name': 'View exam attendance',   'resource': 'exams_attendance', 'action': 'view',   'slug': 'exams_attendance:view'},
+    {'name': 'Create exam attendance', 'resource': 'exams_attendance', 'action': 'create', 'slug': 'exams_attendance:create'},
+    {'name': 'Update exam attendance', 'resource': 'exams_attendance', 'action': 'update', 'slug': 'exams_attendance:update'},
+    {'name': 'Delete exam attendance', 'resource': 'exams_attendance', 'action': 'delete', 'slug': 'exams_attendance:delete'},
+
+
+    # --------------------------
+    # TIME TABLES
+    # --------------------------
+
+    # time_tables_govt_holidays
+    {'name': 'View govt holidays',   'resource': 'time_tables_govt_holidays', 'action': 'view',   'slug': 'time_tables_govt_holidays:view'},
+    {'name': 'Create govt holidays', 'resource': 'time_tables_govt_holidays', 'action': 'create', 'slug': 'time_tables_govt_holidays:create'},
+    {'name': 'Update govt holidays', 'resource': 'time_tables_govt_holidays', 'action': 'update', 'slug': 'time_tables_govt_holidays:update'},
+    {'name': 'Delete govt holidays', 'resource': 'time_tables_govt_holidays', 'action': 'delete', 'slug': 'time_tables_govt_holidays:delete'},
+
+    # time_tables_training_schedules
+    {'name': 'View training schedules',   'resource': 'time_tables_training_schedules', 'action': 'view',   'slug': 'time_tables_training_schedules:view'},
+    {'name': 'Create training schedules', 'resource': 'time_tables_training_schedules', 'action': 'create', 'slug': 'time_tables_training_schedules:create'},
+    {'name': 'Update training schedules', 'resource': 'time_tables_training_schedules', 'action': 'update', 'slug': 'time_tables_training_schedules:update'},
+    {'name': 'Delete training schedules', 'resource': 'time_tables_training_schedules', 'action': 'delete', 'slug': 'time_tables_training_schedules:delete'},
+
 ]
 
 
@@ -290,7 +349,19 @@ INITIAL_ROLES = {
         # Self account
         'self_account:update','self_account:create',
 
+        # --------------------------
+        # EXAMS
+        # --------------------------
+        'exams:view','exams:create','exams:update','exams:delete',
+        'exams_grades:view','exams_grades:create','exams_grades:update','exams_grades:delete',
+        'exams_schedules:view','exams_schedules:create','exams_schedules:update','exams_schedules:delete',
+        'exams_attendance:view','exams_attendance:create','exams_attendance:update','exams_attendance:delete',
 
+        # --------------------------
+        # TIME TABLES
+        # --------------------------
+        'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
+        'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
     ],
 
     # --------------------------
