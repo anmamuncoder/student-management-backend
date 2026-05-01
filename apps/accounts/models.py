@@ -61,7 +61,7 @@ class BaseUser(AbstractBaseUser, PermissionsMixin, BaseModel):
     email = models.EmailField(unique=True)
     otp = models.CharField(max_length=6, blank=True, null=True)
     otp_created_at = models.DateTimeField(null=True, blank=True)
-    is_email_verified = models.BooleanField(default=False)
+    is_email_verified = models.BooleanField(default=True)
     email_verified_at = models.DateTimeField(null=True, blank=True)
 
     # Rest Password Process

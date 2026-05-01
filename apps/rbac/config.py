@@ -1,6 +1,7 @@
 URL_PERMISSION_MAP = [ 
     # Accounts / Users
     (r'/api/v1/accounts/users/', 'accounts_users'), 
+    (r'/api/v1/accounts/users/self/', 'accounts_users_self'), # GET only
     (r'/api/v1/accounts/ranks/', 'accounts_ranks'),  # All Method
 
     # Self acc/accountsount actions (standard naming)
@@ -71,6 +72,8 @@ EXEMPT_PATHS = [
     r'^/api/v1/accounts/verify-reset-otp/',
     r'^/api/v1/accounts/reset-password/',
     r'^/api/v1/accounts/refresh/',
+
+    r'^/api/v1/accounts/users/self/',
 
     
     r'^/admin/',

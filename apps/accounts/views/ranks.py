@@ -26,3 +26,9 @@ class UserViewSet(ModelViewSet):
         admins = User.objects.filter(is_superuser=True)
         serializer = self.get_serializer(admins, many=True)
         return Response(serializer.data)
+    
+    # /users/self/ - only superusers
+    @action(detail=False, methods=["get"], url_path="self", permission_classes=[IsAuthenticated])
+    def self_users(self, request):
+        serializer = self.get_serializer(request.user)
+        return Response(serializer.data)

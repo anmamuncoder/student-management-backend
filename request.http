@@ -154,12 +154,12 @@ Content-Type: application/json
 
 
 ### Login
-POST http://backend.dipstick.xyz/api/v1/accounts/login/
+POST http://localhost:8020/api/v1/accounts/login/
 Content-Type: application/json
 
 {
-    "email": "admin@gmail.com",
-    "password": "123"
+    "email": "teacher@gmail.com",
+    "password": "123456789"
 }
 
 ### Token Refresh
@@ -320,7 +320,8 @@ Content-Type: application/json
 #   }
 # }
 
-@superuser_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4NTIxMDM3LCJpYXQiOjE3NzU5MjkwMzcsImp0aSI6ImRmYWZmNmRlMzE5ZjRmOGNiNmMzNTA3NDIwZWFjNWE1IiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.1bSSC23Gbl3OJ6A5R3EEJmjuALeKK7dBEHs1XwNrz0k
+@superuser_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwMjQ3NDYzLCJpYXQiOjE3Nzc2NTU0NjMsImp0aSI6IjJlYjY0MjFhOGIzYTRlNmVhMTExZTU5ODI5NzNjYjkyIiwiaWQiOiI5NDRiMTBlNi00MjJhLTQ5OGMtOGMwNi01ZjgyOTMyMjQ1YmYifQ.T8lDkYNsTBDaAsX5Qr_KFYv8KpmwjbHgx6gdcPSD3ms
+
 
 # --------------------------------------
 # Permissions  - Only Admin
@@ -525,4 +526,26 @@ http://localhost:8020/api/v1/exams/exam-attendance/
 
 http://localhost:8020/api/v1/time_tables/govt-holidays/
 http://localhost:8020/api/v1/time_tables/training-schedules/
+
+
+###
+GET http://localhost:8020/api/v1/accounts/users/
+Authorization:  Bearer {{superuser_token}}
+
+
+###
+GET http://localhost:8020/api/v1/accounts/users/self/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgwMjQ5NTAxLCJpYXQiOjE3Nzc2NTc1MDEsImp0aSI6ImJiNzA1YzFlYjBmZDQ1NjhiNGU4NGNmYjY0NTczZjI4IiwiaWQiOiI1NWFhY2E2ZC1lOTdmLTQyZmUtYjkxYy0zMTkwYWQwNDcyOWIifQ.Suy-BHamtVwQ4mHJELkt7uTIWXju_ujor0qdu61f5vs
+
+
+###
+POST http://localhost:8020/api/v1/accounts/users/
+Authorization:  Bearer {{superuser_token}}
+Content-Type: application/json
+
+{ 
+    "email": "teacher@gmail.com",
+    "password": "123456789",
+    "role_slug": "teacher"
+}
 
