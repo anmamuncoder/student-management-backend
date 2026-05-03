@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Student, StudentType, StudentGroup, Activity, Spouse, Qualification, BankAccount, MilitaryQualification, ServiceRecord, Award, UNMission, CountryVisited
+from .models import Student, StudentType, StudentGroup, Activity, Spouse, Qualification, BankAccount, MilitaryQualification, ServiceRecord, Award, UNMission, CountryVisited, BatchMembership
 
 
 # ----------------------------
@@ -26,6 +26,17 @@ class StudentGroupSerializer(ModelSerializer):
 class StudentSerializer(ModelSerializer):
     class Meta:
         model = Student
+        fields = "__all__"
+
+
+# ----------------------------
+# Batch Membership
+# ----------------------------
+class BatchMembershipSerializer(ModelSerializer):
+    student_details = StudentSerializer(source='student', read_only=True)
+    
+    class Meta:
+        model = BatchMembership
         fields = "__all__"
 
 

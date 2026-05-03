@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from django.db.models import Q
+from django.utils import timezone
 
 # Create your views here.
 from rest_framework.viewsets import ModelViewSet
@@ -8,7 +10,7 @@ from .models import (
     Student, StudentType, StudentGroup, Activity,
     Spouse, Qualification, BankAccount,
     MilitaryQualification, ServiceRecord,
-    Award, UNMission, CountryVisited
+    Award, UNMission, CountryVisited, BatchMembership
 )
 
 from .serializers import (
@@ -16,7 +18,7 @@ from .serializers import (
     ActivitySerializer, SpouseSerializer, QualificationSerializer,
     BankAccountSerializer, MilitaryQualificationSerializer,
     ServiceRecordSerializer, AwardSerializer,
-    UNMissionSerializer, CountryVisitedSerializer
+    UNMissionSerializer, CountryVisitedSerializer, BatchMembershipSerializer
 )
 
 # ----------------------------
@@ -48,8 +50,19 @@ class StudentGroupViewSet(BaseViewSet):
 class StudentViewSet(BaseViewSet):
     queryset = Student.objects.all().order_by('index_no')
     serializer_class = StudentSerializer
+    
 
 
+# ----------------------------
+# Batch Membership
+# ----------------------------
+class BatchMembershipViewSet(BaseViewSet):
+    queryset = BatchMembership.objects.filter(
+        Q(left_at__isnull=True) | Q(left_at__gt=timezone.now())
+        ).order_by('-created_at')
+
+    serializer_class = BatchMembershipSerializer
+    
 # ----------------------------
 # Activity
 # ----------------------------

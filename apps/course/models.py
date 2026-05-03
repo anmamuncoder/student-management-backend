@@ -14,7 +14,8 @@ class Course(BaseModel):
     vacancy = models.PositiveIntegerField(default=0)
 
     note = models.TextField(blank=True, null=True)
-
+    parent = models.ForeignKey("self",on_delete=models.SET_NULL,null=True,blank=True,related_name="children")
+    
     def __str__(self):
         return self.name
       

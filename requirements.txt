@@ -105,3 +105,31 @@ geoip2==5.2.0 # Converts an IP address into geographic data like country and cit
 # For MySQL support, if needed in the future:
 # django<4.2
 # PyMySQL==1.1.2
+
+
+# #-----------------------------------------------------
+# asgiref==3.11.1
+# attrs==25.4.0
+# django==4.2
+# django-cors-headers==4.9.0
+# django-filter==23.5
+# djangorestframework==3.16.1
+# djangorestframework_simplejwt==5.5.1
+# drf-spectacular==0.29.0
+# inflection==0.5.1
+# jsonschema==4.26.0
+# jsonschema-specifications==2025.9.1
+# pillow==12.1.1
+# psycopg2-binary==2.9.11
+# PyJWT==2.11.0
+# PyMySQL==1.1.2
+# python-decouple==3.8
+# PyYAML==6.0.3
+# referencing==0.37.0
+# rpds-py==0.30.0
+# sqlparse==0.5.5
+# typing_extensions==4.15.0
+# uritemplate==4.2.0
+# whitenoise==6.11.0
+# django-environ==0.13.0
+# #-----------------------------------------------------

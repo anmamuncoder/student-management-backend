@@ -237,3 +237,25 @@ class CountryVisited(BaseModel):
 
     def __str__(self):
         return self.country
+
+
+class BatchMembership(BaseModel):
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
+
+    # extra tracking fields
+    joined_at = models.DateField(auto_now_add=True)
+    left_at = models.DateField(null=True, blank=True)
+
+    is_active = models.BooleanField(default=True)
+    index_no = models.PositiveIntegerField(default=0,null=True,blank=True)
+ 
+    def save(self, *args, **kwargs):
+        # auto set left_at from batch_end
+        if self.batch and self.batch.batch_end:
+            self.left_at = self.batch.batch_end
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.student} - {self.batch}"

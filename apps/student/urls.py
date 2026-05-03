@@ -2,7 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
 from .views import (
-    StudentViewSet, StudentTypeViewSet, StudentGroupViewSet,
+    BatchMembershipViewSet, StudentViewSet, StudentTypeViewSet, StudentGroupViewSet,
     ActivityViewSet, SpouseViewSet, QualificationViewSet,
     BankAccountViewSet, MilitaryQualificationViewSet,
     ServiceRecordViewSet, AwardViewSet,
@@ -17,6 +17,8 @@ router = DefaultRouter()
 router.register(r"students", StudentViewSet)
 router.register(r"student-types", StudentTypeViewSet)
 router.register(r"student-groups", StudentGroupViewSet)
+router.register(r"batch-memberships", BatchMembershipViewSet)
+
 
 router.register(r"activities", ActivityViewSet)
 router.register(r"spouses", SpouseViewSet)

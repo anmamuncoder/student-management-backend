@@ -398,9 +398,24 @@ Content-Type: application/json
 GET http://localhost:8020/api/v1/rbac/roles/teacher/
 Authorization:  Bearer {{superuser_token}}
 
+
 ###
-GET  http://localhost:8020/api/v1/rbac/roles/editor/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc0MzQ0MzQ0LCJpYXQiOjE3NzQzNDM0NDQsImp0aSI6ImNmZjhmNWM4YzE2ZDRlMGRhNTI2MzkwYjAzY2QyODU5IiwiaWQiOiJmNTEzNmYyOS01ZTY4LTRjMTUtODE3YS0wZjk4MDNmOWY2NzQifQ.p_UCRa3KKh7CnfwotBW1uMB7OH8BpnspCwZkJt4b_Qw
+PATCH http://localhost:8020/api/v1/rbac/roles/teacher/
+Authorization:  Bearer {{superuser_token}}
+Content-Type: application/json
+
+{  
+  "permissions": [
+    "courses_detail_syllabus:create",
+    "courses_detail_syllabus:update",
+    "courses_detail_syllabus:view"
+  ]
+  
+}
+
+###
+GET  http://localhost:8020/api/v1/rbac/roles/
+Authorization:  Bearer {{superuser_token}}
 
 ###
 DELETE  http://localhost:8020/api/v1/rbac/roles/slug/
@@ -547,5 +562,48 @@ Content-Type: application/json
     "email": "teacher@gmail.com",
     "password": "123456789",
     "role_slug": "teacher"
+}
+
+###
+GET http://localhost:8020/api/v1/courses/courses/48c9f174-60f6-4a84-b773-70d62a0a35f4/
+Authorization:  Bearer {{superuser_token}}
+
+###
+GET  http://localhost:8020/api/v1/courses/courses/48c9f174-60f6-4a84-b773-70d62a0a35f4/
+Authorization:  Bearer {{superuser_token}}
+
+
+###
+PATCH  http://localhost:8020/api/v1/courses/courses/967e56eb-c1c9-415a-ae4c-3817d6c5c6b8/
+Authorization:  Bearer {{superuser_token}}
+Content-Type: application/json
+
+{ 
+    "parent": "48c9f174-60f6-4a84-b773-70d62a0a35f4"
+}
+
+###
+GET http://localhost:8020/api/v1/courses/batches/
+Authorization:  Bearer {{superuser_token}}
+
+
+
+###
+GET http://localhost:8020/api/v1/students/students/2461bcb5-b652-446d-ad68-bd949837ffc7/
+Authorization:  Bearer {{superuser_token}}
+
+
+###
+GET http://localhost:8020/api/v1/students/batch-memberships/
+Authorization:  Bearer {{superuser_token}}
+
+###
+POST http://localhost:8020/api/v1/students/batch-memberships/
+Authorization:  Bearer {{superuser_token}}
+Content-Type: application/json
+
+{
+  "student": "2461bcb5-b652-446d-ad68-bd949837ffc7",
+  "batch": "934a054e-4310-426c-9da3-738e22d5019c" 
 }
 

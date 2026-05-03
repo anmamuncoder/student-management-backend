@@ -20,7 +20,7 @@ class BaseViewSet(ModelViewSet):
 # Course
 # -----------------------
 class CourseViewSet(BaseViewSet):
-    queryset = Course.objects.prefetch_related("syllabus_blocks__module")
+    queryset = Course.objects.prefetch_related("syllabus_blocks__module","children")
     serializer_class = CourseSerializer
 
 

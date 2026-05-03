@@ -1,4 +1,6 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField, SerializerMethodField
+
+from kernel import serializers
 from .models import Course, Subject, Module, Syllabus, DetailSyllabus, Batch
 
 
@@ -59,10 +61,13 @@ class CourseSerializer(ModelSerializer):
     syllabus_blocks = SyllabusSerializer(many=True, read_only=True)
     detail_syllabus = DetailSyllabusSerializer(many=True,read_only=True)
     batches = BatchSerializer(many=True, read_only=True)
+    
+    childrens = SerializerMethodField()  
 
     class Meta:
         model = Course
         fields = "__all__"
 
-
-        
+    def get_childrens(self, obj):
+        children = obj.children.all()
+        return CourseSerializer(children, many=True).data
