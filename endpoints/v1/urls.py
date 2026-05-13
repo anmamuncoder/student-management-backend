@@ -7,6 +7,9 @@ urlpatterns = [
     path('courses/', include('apps.course.urls', namespace='courses')),
     path('exams/', include('apps.exam.urls', namespace='exams')),
     path('time_tables/', include('apps.time_table.urls', namespace='time_tables')),
+
+    path('trainings/', include('apps.training.urls', namespace='trainings')),
+    path('noticeboards/', include('apps.noticeboard.urls', namespace='noticeboards')),
     
 ]
 

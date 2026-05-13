@@ -138,6 +138,7 @@ class User(BaseUser):
     # -------------------------
     # Personal Info
     # -------------------------
+    age = models.PositiveIntegerField(null=True, blank=True)
     gender = models.CharField(max_length=10,choices=Gender.choices,blank=True,null=True,)
     blood_group = models.CharField(max_length=5, choices=BloodGroup.choices, blank=True, null=True,)
     marital_status = models.CharField(max_length=20, choices=MaritalStatus.choices, null=True,)
@@ -187,10 +188,11 @@ class User(BaseUser):
         db_table = "users"
 
 class Rank(BaseModel):
-    code = models.CharField(max_length=20, unique=True)  
+    code = models.CharField(max_length=20, null=True,blank=True)  
     name = models.CharField(max_length=100)              
     order = models.PositiveIntegerField(default=0)     
     is_active = models.BooleanField(default=True)
+    note = models.TextField(blank=True, null=True)
 
     class Meta:
         ordering = ["order"]

@@ -48,7 +48,7 @@ class StudentGroupViewSet(BaseViewSet):
 # Student
 # ----------------------------
 class StudentViewSet(BaseViewSet):
-    queryset = Student.objects.all().order_by('index_no')
+    queryset = Student.objects.all().order_by('-created_at')
     serializer_class = StudentSerializer
     
 
@@ -57,9 +57,10 @@ class StudentViewSet(BaseViewSet):
 # Batch Membership
 # ----------------------------
 class BatchMembershipViewSet(BaseViewSet):
-    queryset = BatchMembership.objects.filter(
-        Q(left_at__isnull=True) | Q(left_at__gt=timezone.now())
-        ).order_by('-created_at')
+    # queryset = BatchMembership.objects.filter(
+    #     Q(left_at__isnull=True) | Q(left_at__gt=timezone.now())
+    #     ).order_by('-created_at')
+    queryset = BatchMembership.objects.all().order_by('-created_at')
 
     serializer_class = BatchMembershipSerializer
     

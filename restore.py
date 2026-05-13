@@ -5,7 +5,7 @@ import requests
 # CONFIG
 # -----------------------
 BASE_URL = "http://localhost:8020/api/v1"
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5NzI4MjIwLCJpYXQiOjE3NzcxMzYyMjAsImp0aSI6IjgwNDhiMjBjMzQ2NzQ0ZDU5Zjg4NDM0NGJmNGJiNTQ0IiwiaWQiOiI5NDRiMTBlNi00MjJhLTQ5OGMtOGMwNi01ZjgyOTMyMjQ1YmYifQ.Dv8n3HBgB2e7jn9MoSVnMdzuSwVcTRzK1s34BeEq2V0"
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxMTE2Mjg3LCJpYXQiOjE3Nzg1MjQyODcsImp0aSI6IjUwOTM1YTQxYWE4ZTRmZmY5NWY3YTNhNGU5NDRmNjJmIiwiaWQiOiJjOTNhMDM2NS02YzcxLTQ5YTItYTZlNS1kNmE3YzgyMWViNWYifQ.YO94v1MpUdVjJRhbgLX5t60QvCESRqxXVfeyJSjT4kE"
 
 
 STATE_FILE = "restore_state.json"
@@ -35,40 +35,116 @@ subject_map = {}
 batch_map = {}
 user_map = {}
 student_map = {}
-
-existing_pnumbers = set()
+batch_membership_map = {}
 
 # -----------------------
-# HELPER
+# NORMALIZERS
 # -----------------------
-def post(url, payload,label=""):
+BLOOD_GROUP_MAP = {
+    "a_positive":  "A+",
+    "a_negative":  "A-",
+    "b_positive":  "B+",
+    "b_negative":  "B-",
+    "ab_positive": "AB+",
+    "ab_negative": "AB-",
+    "o_positive":  "O+",
+    "o_negative":  "O-",
+    "a+": "A+", "a-": "A-",
+    "b+": "B+", "b-": "B-",
+    "ab+": "AB+", "ab-": "AB-",
+    "o+": "O+", "o-": "O-",
+}
+
+MARITAL_STATUS_MAP = {
+    "single":    "single",
+    "married":   "married",
+    "Married":   "married",
+    "divorced":  "divorced",
+    "widowed":   "widowed",
+    "unmarried": "single",
+    "widow":     "widowed",
+    "widower":   "widowed",
+}
+
+
+def normalize_blood_group(val):
+    if not val:
+        return None
+    return BLOOD_GROUP_MAP.get(val.strip().lower()) or None
+
+
+def normalize_marital_status(val):
+    if not val:
+        return None
+    return MARITAL_STATUS_MAP.get(val.strip().lower()) or None
+
+
+# -----------------------
+# HELPERS
+# -----------------------
+def normalize_pnumber(p):
+    return (p or "").replace(" ", "").lower()
+
+
+def clean_date(val):
+    """Return None for invalid/placeholder dates."""
+    if not val:
+        return None
+    s = str(val).strip()
+    if s in ("", "0000-00-00", "0000-00-00 00:00:00", "1970-01-01"):
+        return None
+    return s
+
+
+def post(url, payload, label=""):
     res = session.post(url, json=payload)
     if res.status_code in [200, 201]:
         return res.json()
     else:
-        print("URL:", url)
-        print("Payload:", payload)
-        print(f"❌ {label}", res.text)
-        print("-" * 60)
+        print(f"POST ERROR [{label}]: {url}")
+        print("Payload:", json.dumps(payload, indent=2))
+        print("Response:", res.text)
+        print("-" * 50)
         return None
+
+
+def patch(url, payload, label=""):
+    res = session.patch(url, json=payload)
+    if res.status_code in [200, 202]:
+        return res.json()
+    else:
+        print(f"PATCH ERROR [{label}]: {url}")
+        print("Payload:", json.dumps(payload, indent=2))
+        print("Response:", res.text)
+        print("-" * 50)
+        return None
+
+
+# -----------------------
+# PREPARE MAIN STUDENT MAP
+# -----------------------
+main_student_by_pnumber = {}
+
+for s in data["main_students"]:
+    p = normalize_pnumber(s.get("pnumber"))
+    if p:
+        main_student_by_pnumber[p] = s
+
 
 # -----------------------
 # RANK
 # -----------------------
 def create_ranks():
     for i, r in enumerate(data["designations"], start=1):
-
         payload = {
             "name": r["name"],
-            "code": (r.get('note') or r["name"].lower().replace(" ", "_")) + f"_{i}",
+            "code": (r.get("note") or r["name"].lower().replace(" ", "_")) + f"_{i}",
             "order": r["id"]
         }
-
-        res = post(f"{BASE_URL}/accounts/ranks/", payload)
-
+        res = post(f"{BASE_URL}/accounts/ranks/", payload, "Rank")
         if res:
             rank_map[r["id"]] = res["id"]
-            # print(f"Created: {r['name']} -> {payload['code']}")
+
 
 # -----------------------
 # STUDENT TYPE
@@ -79,9 +155,10 @@ def create_student_types():
             "name": st["type"],
             "note": st.get("note")
         }
-        res = post(f"{BASE_URL}/students/student-types/", payload)
+        res = post(f"{BASE_URL}/students/student-types/", payload, "StudentType")
         if res:
             student_type_map[st["id"]] = res["id"]
+
 
 # -----------------------
 # COURSES
@@ -95,9 +172,10 @@ def create_courses():
             "vacancy": int(c["vacency"]),
             "note": c["note"]
         }
-        res = post(f"{BASE_URL}/courses/courses/", payload)
+        res = post(f"{BASE_URL}/courses/courses/", payload, "Course")
         if res:
             course_map[c["id"]] = res["id"]
+
 
 # -----------------------
 # MODULES
@@ -108,9 +186,10 @@ def create_modules():
             "name": m["module_name"],
             "code": m["module_code"]
         }
-        res = post(f"{BASE_URL}/courses/modules/", payload)
+        res = post(f"{BASE_URL}/courses/modules/", payload, "Module")
         if res:
             module_map[m["id"]] = res["id"]
+
 
 # -----------------------
 # SUBJECTS
@@ -121,39 +200,10 @@ def create_subjects():
             "name": s["subject_name"],
             "code": s["subject_code"]
         }
-        res = post(f"{BASE_URL}/courses/subjects/", payload)
+        res = post(f"{BASE_URL}/courses/subjects/", payload, "Subject")
         if res:
             subject_map[s["id"]] = res["id"]
 
-# -----------------------
-# SYLLABUS
-# -----------------------
-def create_syllabus():
-    for m in data["mainblocksyllabus_tbl"]:
-        payload = {
-            "course": course_map.get(int(m["class_id"])),
-            "module": module_map.get(m["id"]),
-            "trade": m["trade"],
-            "note": m["note"]
-        }
-        post(f"{BASE_URL}/courses/syllabus/", payload)
-
-# -----------------------
-# DETAIL SYLLABUS
-# -----------------------
-def create_detail_syllabus():
-    for s in data["syllabuses"]:
-        payload = {
-            "course": course_map.get(s["class_id"]),
-            "module": module_map.get(s["module_id"]),
-            "subject": subject_map.get(int(s["mainsyllabus_id"])),
-            "lecture": int(s["lecture"]),
-            "practical": int(s["practical"]),
-            "written": int(s["written"]),
-            "others": int(s["others"]),
-            "note": s["note"]
-        }
-        post(f"{BASE_URL}/courses/detail-syllabus/", payload)
 
 # -----------------------
 # BATCH
@@ -165,139 +215,266 @@ def create_batches():
             "course": course_map.get(c["id"]),
             "note": c["note"]
         }
-        res = post(f"{BASE_URL}/courses/batches/", payload)
+        res = post(f"{BASE_URL}/courses/batches/", payload, "Batch")
         if res:
             batch_map[c["id"]] = res["id"]
+
 
 # -----------------------
 # USERS (MERGED)
 # -----------------------
-
 def create_users():
-    url = f"{BASE_URL}/accounts/users/"
 
-    # MAIN STUDENTS
+    # MAIN USERS — full field mapping
     for s in data["main_students"]:
-        create_user(s, s["id"],label="Main Student")
+        create_main_user(s)
 
-    # NORMAL STUDENTS
+    # MERGE / CREATE from students table
     for s in data["students"]:
-        create_user(s, s["student_id"],label="Normal Student")
+        p = normalize_pnumber(s.get("pnumber"))
+
+        if p in main_student_by_pnumber:
+            # Already created from main_students — patch in email if missing
+            main_s = main_student_by_pnumber[p]
+            user_id = user_map.get(main_s["id"])
+
+            if not user_id:
+                continue
+
+            patch_payload = {}
+            if s.get("email"):
+                patch_payload["email"] = s["email"]
+            if s.get("phone"):
+                patch_payload["phone"] = s["phone"]
+
+            if patch_payload:
+                patch(f"{BASE_URL}/accounts/users/{user_id}/", patch_payload, "Merge User Email")
+
+        else:
+            # Not in main_students — create a basic user
+            create_normal_user(s)
 
 
-def create_user(s, key,label=""):
-    
+def create_main_user(s):
+    """Create a user from main_students with all available fields."""
+    key = s["id"]
     email = s.get("email") or f"user{key}@dipstick.com"
+
+    rank_id_raw = s.get("rank")
+    rank_id = None
+    if rank_id_raw:
+        try:
+            rank_id = rank_map.get(int(rank_id_raw))
+        except (ValueError, TypeError):
+            pass
+
+    payload = {
+        # Identity
+        "email": email,
+        "password": "12345678",
+        "full_name": s.get("name"),
+        "short_name": s.get("sname"),
+        "personal_number": s.get("pnumber"),
+
+        # Rank
+        "rank": rank_id,
+
+        # Contact
+        "phone": s.get("phone"),
+        "national_id": s.get("national_id") or None,
+
+        # Personal Info
+        "age": s.get("age"),
+        "gender": s.get("gender") or None,
+        "blood_group": normalize_blood_group(s.get("blood_group")),
+        "marital_status": normalize_marital_status(s.get("mstatus")),
+        "date_of_marriage": clean_date(s.get("dom")),
+
+        # Birth Info
+        "birth_date": clean_date(s.get("dob")),
+        "place_of_birth": s.get("pob") or None,
+        "country": s.get("country") or None,
+        "religion": s.get("religion") or None,
+
+        # Address
+        "present_address": s.get("present_address") or None,
+        "permanent_address": s.get("permanent_address") or None,
+
+        # Organization
+        "current_unit": s.get("cunit") or None,
+        "parent_unit_auth": s.get("punit") or None,
+        "joining_date": clean_date(s.get("date_of_joining")),
+        "date_of_enrolment": clean_date(s.get("doc")),
+    }
+
+    res = post(f"{BASE_URL}/accounts/users/", payload, "Main User")
+    if res:
+        user_map[key] = res["id"]
+
+
+def create_normal_user(s):
+    """Create a basic user from students table (not in main_students)."""
+    key = s["student_id"]
+    email = s.get("email") or f"user{key}@dipstick.com"
+
+    rank_id_raw = s.get("rank")
+    rank_id = None
+    if rank_id_raw:
+        try:
+            rank_id = rank_map.get(int(rank_id_raw))
+        except (ValueError, TypeError):
+            pass
 
     payload = {
         "email": email,
         "password": "12345678",
         "full_name": s.get("name"),
-        "phone": s.get("phone"),
         "personal_number": s.get("pnumber"),
+        "phone": s.get("phone"),
+        "rank": rank_id,
+        "current_unit": s.get("cunit") or None,
     }
 
-    res = post(f"{BASE_URL}/accounts/users/", payload,label=label)
+    res = post(f"{BASE_URL}/accounts/users/", payload, "Normal User")
     if res:
         user_map[key] = res["id"]
 
+
 # -----------------------
-# STUDENTS (MERGED LOGIC)
+# BATCH MEMBERSHIP
+# -----------------------
+def create_batch_membership(student_id, batch_id=None, is_active=True):
+    payload = {
+        "student": student_id,
+        "batch": batch_id,
+        "is_active": is_active
+    }
+    res = post(f"{BASE_URL}/students/batch-memberships/", payload, "BatchMembership")
+    if res:
+        batch_membership_map[student_id] = res["id"]
+
+
+# -----------------------
+# STUDENTS
 # -----------------------
 def create_students():
     url = f"{BASE_URL}/students/students/"
 
-    # MAIN STUDENT
+    # MAIN — full field mapping to Student model
     for s in data["main_students"]:
-        pnumber = s["pnumber"]
-
         payload = {
             "user": user_map.get(s["id"]),
-            "student_type": student_type_map.get(s["type_id"]),
-            "batch": batch_map.get(int(s.get("class_id", 0))),
-            "second_language": s["second_language"],
+            "student_type": student_type_map.get(s.get("type_id")),
 
-            "father_full_name": s["father_name"],
-            "mother_full_name": s["mother_name"],
+            # Academic
+            "second_language": s.get("second_language") or None,
+            "date_of_joining": clean_date(s.get("date_of_joining")),
 
-            "health_condition": s["health_condition"],
-            "is_active": True
+            # Family
+            "father_full_name": s.get("father_name") or None,
+            "father_phone": s.get("father_phone") or None,
+            "father_address": s.get("father_address") or None,
+            "father_profession": s.get("father_profession") or None,
+            "father_designation": s.get("father_designation") or None,
+
+            "mother_full_name": s.get("mother_name") or None,
+            "mother_phone": s.get("mother_phone") or None,
+            "mother_address": s.get("mother_address") or None,
+            "mother_profession": s.get("mother_profession") or None,
+            "mother_designation": s.get("mother_designation") or None,
+
+            # Health / Other
+            "health_condition": s.get("health_condition") or None,
+            "other_info": s.get("other_info") or None,
+            "previous_school": s.get("previous_school") or None,
+            "previous_class": s.get("previous_class") or None,
+            "current_unit": s.get("cunit") or None,
+            "parent_unit": s.get("punit") or None,
+            "discount": s.get("discount_id") or 0,
+
+            "is_active": True,
         }
 
-        res = post(url, payload)
+        res = post(url, payload, "Main Student")
         if res:
-            student_map[s["id"]] = res["id"]
-            existing_pnumbers.add(pnumber)
+            student_id = res["id"]
+            student_map[s["id"]] = student_id
+            create_batch_membership(student_id, None, True)
 
-    # NORMAL STUDENT
+    # Patch batch onto already-created main students using students table
     for s in data["students"]:
-        pnumber = s["pnumber"]
+        p = normalize_pnumber(s.get("pnumber"))
 
-        if pnumber in existing_pnumbers:
-            continue
+        if p in main_student_by_pnumber:
+            main_s = main_student_by_pnumber[p]
+            student_id = student_map.get(main_s["id"])
 
-        payload = {
-            "user": user_map.get(s["student_id"]),
-            "batch": batch_map.get(int(s["class_id"])),
-            "is_active": False
-        }
+            if not student_id:
+                continue
 
-        post(url, payload)
+            class_id = s.get("class_id")
+            batch_id = batch_map.get(int(class_id)) if class_id and str(class_id).isdigit() else None
+
+            if batch_id:
+                membership_id = batch_membership_map.get(student_id)
+                if membership_id:
+                    patch(
+                        f"{BASE_URL}/students/batch-memberships/{membership_id}/",
+                        {"batch": batch_id},
+                        "Patch Batch onto Main Student"
+                    )
+
+        else:
+            # NORMAL student  not in main_students
+            payload = {
+                "user": user_map.get(s["student_id"]),
+                "is_active": False,
+            }
+
+            res = post(url, payload, "Normal Student")
+            if res:
+                student_id = res["id"]
+
+                class_id = s.get("class_id")
+                batch_id = batch_map.get(int(class_id)) if class_id and str(class_id).isdigit() else None
+                if batch_id:
+                    create_batch_membership(student_id, batch_id, False)
 
 
-
+# -----------------------
+# SAVE STATE
+# -----------------------
 def save_state():
     state = {
         "rank_map": rank_map,
         "student_type_map": student_type_map,
         "course_map": course_map,
-        "module_map": module_map,
-        "subject_map": subject_map,
         "batch_map": batch_map,
-        "user_map": user_map,
-        "student_map": student_map,
-        "existing_pnumbers": list(existing_pnumbers)
+        "user_map": {str(k): v for k, v in user_map.items()},
+        "student_map": {str(k): v for k, v in student_map.items()},
+        "batch_membership_map": {str(k): v for k, v in batch_membership_map.items()},
     }
 
-    with open(STATE_FILE, "w", encoding="utf-8") as f:
-        json.dump(state, f, indent=4, ensure_ascii=False)
+    with open(STATE_FILE, "w") as f:
+        json.dump(state, f, indent=4)
 
-    print("STATE SAVED SUCCESSFULLY")
+    print("STATE SAVED")
+
+
 # -----------------------
-# RUN ORDER
+# RUN
 # -----------------------
 if __name__ == "__main__":
-    print("Ranks")
     create_ranks()
-
-    print("Student Types")
     create_student_types()
-
-    print("Courses")
     create_courses()
-
-    print("Modules")
     create_modules()
-
-    print("Subjects")
     create_subjects()
-
-    print("Syllabus")
-    create_syllabus()
-
-    print("Detail Syllabus")
-    create_detail_syllabus()
-
-    print("Batch")
     create_batches()
 
-    print("Users")
     create_users()
-
-    print("Students")
     create_students()
 
-    print("FULL RESTORE COMPLETED")
-
     save_state()
-    print("STATE SAVED TO", STATE_FILE)
+
+    print("RESTORE COMPLETED")

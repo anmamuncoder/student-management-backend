@@ -5,8 +5,7 @@ from .views import (
     CourseViewSet,
     SubjectViewSet,
     ModuleViewSet,
-    SyllabusViewSet,
-    DetailSyllabusViewSet,
+    SyllabusViewSet, 
     BatchViewSet
 )
 
@@ -18,8 +17,7 @@ router = DefaultRouter()
 router.register(r"courses", CourseViewSet)
 router.register(r"subjects", SubjectViewSet)
 router.register(r"modules", ModuleViewSet)
-router.register(r"syllabus", SyllabusViewSet)
-router.register(r"detail-syllabus", DetailSyllabusViewSet)
+router.register(r"syllabus", SyllabusViewSet) 
 router.register(r"batches", BatchViewSet)
 
 app_name = "courses"

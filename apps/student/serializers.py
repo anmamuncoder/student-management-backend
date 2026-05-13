@@ -23,7 +23,7 @@ class StudentGroupSerializer(ModelSerializer):
 # ----------------------------
 # Student
 # ----------------------------
-class StudentSerializer(ModelSerializer):
+class SampleStudentSerializer(ModelSerializer):
     class Meta:
         model = Student
         fields = "__all__"
@@ -33,7 +33,7 @@ class StudentSerializer(ModelSerializer):
 # Batch Membership
 # ----------------------------
 class BatchMembershipSerializer(ModelSerializer):
-    student_details = StudentSerializer(source='student', read_only=True)
+    student_details = SampleStudentSerializer(source='student', read_only=True)
     
     class Meta:
         model = BatchMembership
@@ -118,4 +118,49 @@ class UNMissionSerializer(ModelSerializer):
 class CountryVisitedSerializer(ModelSerializer):
     class Meta:
         model = CountryVisited
+        fields = "__all__"
+
+
+# ----------------------------
+# Student
+# ----------------------------
+class StudentSerializer(ModelSerializer):
+
+    student_type_details = StudentTypeSerializer(
+        source='student_type',
+        read_only=True
+    )
+
+    qualifications = QualificationSerializer(
+        many=True,
+        read_only=True
+    )
+
+    bank_accounts = BankAccountSerializer(
+        many=True,
+        read_only=True
+    )
+
+    military_qualifications = MilitaryQualificationSerializer(
+        many=True,
+        read_only=True
+    )
+
+    un_missions = UNMissionSerializer(
+        many=True,
+        read_only=True
+    )
+
+    visited_country = CountryVisitedSerializer(
+        many=True,
+        read_only=True
+    )
+
+    batch_memberships = BatchMembershipSerializer(
+        many=True,
+        read_only=True
+    )
+
+    class Meta:
+        model = Student
         fields = "__all__"

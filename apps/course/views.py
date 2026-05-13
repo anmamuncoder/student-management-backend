@@ -1,13 +1,12 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Course, Subject, Module, Syllabus, DetailSyllabus, Batch
+from .models import Course, Subject, Module, Syllabus, Batch
 from .serializers import (
     CourseSerializer,
     SubjectSerializer,
     ModuleSerializer,
     SyllabusSerializer,
-    DetailSyllabusSerializer,
     BatchSerializer
 )
 
@@ -46,14 +45,6 @@ class ModuleViewSet(BaseViewSet):
 class SyllabusViewSet(BaseViewSet):
     queryset = Syllabus.objects.all()
     serializer_class = SyllabusSerializer
-
-
-# -----------------------
-# Detail Syllabus
-# -----------------------
-class DetailSyllabusViewSet(BaseViewSet):
-    queryset = DetailSyllabus.objects.all()
-    serializer_class = DetailSyllabusSerializer
 
 
 # -----------------------

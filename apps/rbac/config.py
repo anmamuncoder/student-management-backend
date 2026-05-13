@@ -34,8 +34,7 @@ URL_PERMISSION_MAP = [
     (r'/api/v1/courses/courses/', 'courses_courses'), # All Method
     (r'/api/v1/courses/subjects/', 'courses_subjects'), # All Method
     (r'/api/v1/courses/modules/', 'courses_modules'), # All Method
-    (r'/api/v1/courses/syllabus/', 'courses_syllabus'), # All Method
-    (r'/api/v1/courses/detail-syllabus/', 'courses_detail_syllabus'), # All Method
+    (r'/api/v1/courses/syllabus/', 'courses_syllabus'), # All Method 
     (r'/api/v1/courses/batches/', 'courses_batches'), # All Method
 
 
@@ -48,6 +47,16 @@ URL_PERMISSION_MAP = [
     # Time Tables Module 
     (r'/api/v1/time_tables/govt-holidays/', 'time_tables_govt_holidays'),
     (r'/api/v1/time_tables/training-schedules/', 'time_tables_training_schedules'),
+
+    # Trainings
+    (r'/api/v1/trainings/training-programmes/', 'trainings_training_programmes'),
+    (r'/api/v1/trainings/weightage-distributions/', 'trainings_weightage_distributions'),
+    (r'/api/v1/trainings/observation-sheets/', 'trainings_observation_sheets'),
+    (r'/api/v1/trainings/final-results/', 'trainings_final_results'),
+
+    # # Noticeboards
+    (r'/api/v1/noticeboards/events/', 'noticeboards_events'),
+    (r'/api/v1/noticeboards/notices/', 'noticeboards_notices'),
 ]
 
 
@@ -234,13 +243,7 @@ INITIAL_PERMISSIONS = [
     {'name': 'Create syllabus', 'resource': 'courses_syllabus', 'action': 'create', 'slug': 'courses_syllabus:create'},
     {'name': 'Update syllabus', 'resource': 'courses_syllabus', 'action': 'update', 'slug': 'courses_syllabus:update'},
     {'name': 'Delete syllabus', 'resource': 'courses_syllabus', 'action': 'delete', 'slug': 'courses_syllabus:delete'},
-
-    # detail syllabus
-    {'name': 'View detail syllabus',   'resource': 'courses_detail_syllabus', 'action': 'view',   'slug': 'courses_detail_syllabus:view'},
-    {'name': 'Create detail syllabus', 'resource': 'courses_detail_syllabus', 'action': 'create', 'slug': 'courses_detail_syllabus:create'},
-    {'name': 'Update detail syllabus', 'resource': 'courses_detail_syllabus', 'action': 'update', 'slug': 'courses_detail_syllabus:update'},
-    {'name': 'Delete detail syllabus', 'resource': 'courses_detail_syllabus', 'action': 'delete', 'slug': 'courses_detail_syllabus:delete'},
-
+ 
     # batches
     {'name': 'View batches',   'resource': 'courses_batches', 'action': 'view',   'slug': 'courses_batches:view'},
     {'name': 'Create batches', 'resource': 'courses_batches', 'action': 'create', 'slug': 'courses_batches:create'},
@@ -294,6 +297,42 @@ INITIAL_PERMISSIONS = [
     {'name': 'Update training schedules', 'resource': 'time_tables_training_schedules', 'action': 'update', 'slug': 'time_tables_training_schedules:update'},
     {'name': 'Delete training schedules', 'resource': 'time_tables_training_schedules', 'action': 'delete', 'slug': 'time_tables_training_schedules:delete'},
 
+
+    # Trainings
+    {'name': 'View training programmes',   'resource': 'trainings_training_programmes', 'action': 'view',   'slug': 'trainings_training_programmes:view'},
+    {'name': 'Create training programmes', 'resource': 'trainings_training_programmes', 'action': 'create', 'slug': 'trainings_training_programmes:create'},
+    {'name': 'Update training programmes', 'resource': 'trainings_training_programmes', 'action': 'update', 'slug': 'trainings_training_programmes:update'},
+    {'name': 'Delete training programmes', 'resource': 'trainings_training_programmes', 'action': 'delete', 'slug': 'trainings_training_programmes:delete'},
+
+    # Weightage Distributions
+    {'name': 'View weightage distributions',   'resource': 'trainings_weightage_distributions', 'action': 'view',   'slug': 'trainings_weightage_distributions:view'},
+    {'name': 'Create weightage distributions', 'resource': 'trainings_weightage_distributions', 'action': 'create', 'slug': 'trainings_weightage_distributions:create'},
+    {'name': 'Update weightage distributions', 'resource': 'trainings_weightage_distributions', 'action': 'update', 'slug': 'trainings_weightage_distributions:update'},
+    {'name': 'Delete weightage distributions', 'resource': 'trainings_weightage_distributions', 'action': 'delete', 'slug': 'trainings_weightage_distributions:delete'},
+
+    # Observation Sheets
+    {'name': 'View observation sheets',   'resource': 'trainings_observation_sheets', 'action': 'view',   'slug': 'trainings_observation_sheets:view'},
+    {'name': 'Create observation sheets', 'resource': 'trainings_observation_sheets', 'action': 'create', 'slug': 'trainings_observation_sheets:create'},
+    {'name': 'Update observation sheets', 'resource': 'trainings_observation_sheets', 'action': 'update', 'slug': 'trainings_observation_sheets:update'},
+    {'name': 'Delete observation sheets', 'resource': 'trainings_observation_sheets', 'action': 'delete', 'slug': 'trainings_observation_sheets:delete'},
+
+    # Final Results
+    {'name': 'View final results',   'resource': 'trainings_final_results', 'action': 'view',   'slug': 'trainings_final_results:view'},
+    {'name': 'Create final results', 'resource': 'trainings_final_results', 'action': 'create', 'slug': 'trainings_final_results:create'},
+    {'name': 'Update final results', 'resource': 'trainings_final_results', 'action': 'update', 'slug': 'trainings_final_results:update'},
+    {'name': 'Delete final results', 'resource': 'trainings_final_results', 'action': 'delete', 'slug': 'trainings_final_results:delete'},
+
+    # Events
+    {'name': 'View events',   'resource': 'noticeboards_events', 'action': 'view',   'slug': 'noticeboards_events:view'},
+    {'name': 'Create events', 'resource': 'noticeboards_events', 'action': 'create', 'slug': 'noticeboards_events:create'},
+    {'name': 'Update events', 'resource': 'noticeboards_events', 'action': 'update', 'slug': 'noticeboards_events:update'},
+    {'name': 'Delete events', 'resource': 'noticeboards_events', 'action': 'delete', 'slug': 'noticeboards_events:delete'},
+
+    # Notices
+    {'name': 'View notices',   'resource': 'noticeboards_notices', 'action': 'view',   'slug': 'noticeboards_notices:view'},
+    {'name': 'Create notices', 'resource': 'noticeboards_notices', 'action': 'create', 'slug': 'noticeboards_notices:create'},
+    {'name': 'Update notices', 'resource': 'noticeboards_notices', 'action': 'update', 'slug': 'noticeboards_notices:update'},
+    {'name': 'Delete notices', 'resource': 'noticeboards_notices', 'action': 'delete', 'slug': 'noticeboards_notices:delete'},
 ]
 
 
@@ -346,7 +385,6 @@ INITIAL_ROLES = {
         'courses_subjects:view','courses_subjects:create','courses_subjects:update','courses_subjects:delete',
         'courses_modules:view','courses_modules:create','courses_modules:update','courses_modules:delete',
         'courses_syllabus:view','courses_syllabus:create','courses_syllabus:update','courses_syllabus:delete',
-        'courses_detail_syllabus:view','courses_detail_syllabus:create','courses_detail_syllabus:update','courses_detail_syllabus:delete',
         'courses_batches:view','courses_batches:create','courses_batches:update','courses_batches:delete',
 
         # Self account
@@ -365,6 +403,13 @@ INITIAL_ROLES = {
         # --------------------------
         'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
         'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
+
+        'trainings_training_programmes:view','trainings_training_programmes:create','trainings_training_programmes:update','trainings_training_programmes:delete',
+        'trainings_weightage_distributions:view','trainings_weightage_distributions:create','trainings_weightage_distributions:update','trainings_weightage_distributions:delete',
+        'trainings_observation_sheets:view','trainings_observation_sheets:create','trainings_observation_sheets:update','trainings_observation_sheets:delete',
+        'trainings_final_results:view','trainings_final_results:create','trainings_final_results:update','trainings_final_results:delete',
+        'noticeboards_events:view','noticeboards_events:create','noticeboards_events:update','noticeboards_events:delete',
+        'noticeboards_notices:view','noticeboards_notices:create','noticeboards_notices:update','noticeboards_notices:delete',
     ],
 
     # --------------------------
@@ -389,8 +434,7 @@ INITIAL_ROLES = {
         'courses_courses:view','courses_courses:create','courses_courses:update',
         'courses_subjects:view','courses_subjects:create','courses_subjects:update',
         'courses_modules:view','courses_modules:create','courses_modules:update',
-        'courses_syllabus:view','courses_syllabus:create','courses_syllabus:update',
-        'courses_detail_syllabus:view','courses_detail_syllabus:create','courses_detail_syllabus:update',
+        'courses_syllabus:view','courses_syllabus:create','courses_syllabus:update', 
         'courses_batches:view','courses_batches:create','courses_batches:update',
 
         # View users
@@ -400,7 +444,14 @@ INITIAL_ROLES = {
         'self_account:update','self_account:create',
 
         # Self Permission 
-        'rbac_permissions_self:view'
+        'rbac_permissions_self:view',
+
+        'trainings_training_programmes:view',
+        'trainings_weightage_distributions:view',
+        'trainings_observation_sheets:view',
+        'trainings_final_results:view',
+        'noticeboards_events:view',
+        'noticeboards_notices:view',
     ],
 
     # --------------------------
@@ -419,8 +470,7 @@ INITIAL_ROLES = {
     #     'courses_courses:view',
     #     'courses_subjects:view',
     #     'courses_modules:view',
-    #     'courses_syllabus:view',
-    #     'courses_detail_syllabus:view',
+    #     'courses_syllabus:view', 
     #     'courses_batches:view',
 
     #     # Self account
@@ -448,7 +498,13 @@ INITIAL_ROLES = {
         'self_account:update','self_account:create',
         
         # Self Permission 
-        'rbac_permissions_self:view'
+        'rbac_permissions_self:view',
+        'trainings_training_programmes:view',
+        'trainings_weightage_distributions:view',
+        'trainings_observation_sheets:view',
+        'trainings_final_results:view',
+        'noticeboards_events:view',
+        'noticeboards_notices:view',
     ], 
 
     'teacher': [
@@ -465,8 +521,7 @@ INITIAL_ROLES = {
         'courses_courses:view','courses_courses:create','courses_courses:update',
         'courses_subjects:view','courses_subjects:create','courses_subjects:update',
         'courses_modules:view','courses_modules:create','courses_modules:update',
-        'courses_syllabus:view','courses_syllabus:create','courses_syllabus:update',
-        'courses_detail_syllabus:view','courses_detail_syllabus:create','courses_detail_syllabus:update',
+        'courses_syllabus:view','courses_syllabus:create','courses_syllabus:update', 
         'courses_batches:view','courses_batches:create','courses_batches:update',
 
         # Self account

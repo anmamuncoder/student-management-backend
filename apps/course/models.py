@@ -36,32 +36,25 @@ class Module(BaseModel):
  
 class Syllabus(BaseModel):
 
-    course = models.ForeignKey(Course,on_delete=models.CASCADE,related_name="syllabus_blocks")
-    module = models.ForeignKey(Module,on_delete=models.CASCADE,related_name="syllabus_blocks")
+    course = models.ForeignKey(Course,on_delete=models.CASCADE, blank=True, null=True,related_name="syllabus_blocks")
+    module = models.ForeignKey(Module,on_delete=models.CASCADE, blank=True, null=True, related_name="syllabus_blocks")
+    subject = models.ForeignKey(Subject,on_delete=models.CASCADE, blank=True, null=True, related_name="detail_syllabus")
 
-    trade = models.CharField(max_length=100, blank=True, null=True)
-
-    note = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.module.name} ({self.module.code})"
-
+    trade = models.CharField(max_length=100, blank=True, null=True) 
  
-class DetailSyllabus(BaseModel):
-
-    course = models.ForeignKey(Course,on_delete=models.CASCADE,related_name="detail_syllabus")
-    module = models.ForeignKey(Module,on_delete=models.CASCADE,related_name="detail_syllabus")
-    subject = models.ForeignKey(Subject,on_delete=models.CASCADE,related_name="detail_syllabus")
-
     lecture = models.PositiveIntegerField(default=0)
     practical = models.PositiveIntegerField(default=0)
     written = models.PositiveIntegerField(default=0)
     others = models.PositiveIntegerField(default=0)
 
     note = models.TextField(blank=True, null=True)
+    # -------------------------
+    # FILE UPLOAD FIELDS
+    # -------------------------
+    document = models.FileField(upload_to="syllabus/documents/",null=True, blank=True)
 
     def __str__(self):
-        return self.subject.name
+        return f"{self.module.name} ({self.module.code})"
 
  
 class Batch(BaseModel):

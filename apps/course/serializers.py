@@ -1,23 +1,15 @@
 from rest_framework.serializers import ModelSerializer, PrimaryKeyRelatedField, SerializerMethodField
 
 from kernel import serializers
-from .models import Course, Subject, Module, Syllabus, DetailSyllabus, Batch
+from .models import Course, Subject, Module, Syllabus, Batch
 
 
-# -----------------------
-# Detail Syllabus
-# -----------------------
-class DetailSyllabusSerializer(ModelSerializer):
-    class Meta:
-        model = DetailSyllabus
-        fields = "__all__"
 
 
 # -----------------------
 # Subject
 # -----------------------
 class SubjectSerializer(ModelSerializer):
-    detail_syllabus = DetailSyllabusSerializer(many=True,read_only=True)
     class Meta:
         model = Subject
         fields = "__all__"
@@ -38,7 +30,6 @@ class SyllabusSerializer(ModelSerializer):
 # -----------------------
 class ModuleSerializer(ModelSerializer):
     syllabus_blocks = SyllabusSerializer(many=True,read_only=True)
-    detail_syllabus = DetailSyllabusSerializer(many=True,read_only=True)
 
     class Meta:
         model = Module
@@ -59,7 +50,6 @@ class BatchSerializer(ModelSerializer):
 # -----------------------
 class CourseSerializer(ModelSerializer):
     syllabus_blocks = SyllabusSerializer(many=True, read_only=True)
-    detail_syllabus = DetailSyllabusSerializer(many=True,read_only=True)
     batches = BatchSerializer(many=True, read_only=True)
     
     childrens = SerializerMethodField()  

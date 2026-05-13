@@ -1,5 +1,13 @@
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+
+# ----------------------------
+# Base View (optional reuse)
+# ----------------------------
+class BaseViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticated]
+
 
 #--------------------------------
 # BaseModelViewSet to standardize API responses for all ModelViewSets

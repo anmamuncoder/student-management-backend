@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Course, Subject, Module, Syllabus, DetailSyllabus, Batch
+from .models import Course, Subject, Module, Syllabus, Batch
 
 
 # ----------------------------
@@ -9,12 +9,6 @@ class SyllabusInline(admin.TabularInline):
     model = Syllabus
     extra = 1
     fields = ('module', 'trade', 'note')
-
-
-class DetailSyllabusInline(admin.TabularInline):
-    model = DetailSyllabus
-    extra = 1
-    fields = ('module', 'subject', 'lecture', 'practical', 'written', 'others', 'note')
 
 
 class BatchInline(admin.TabularInline):
@@ -32,7 +26,7 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = ('name', 'short_name', 'duration', 'vacancy')
     search_fields = ('name', 'short_name')
 
-    inlines = [SyllabusInline, DetailSyllabusInline, BatchInline]
+    inlines = [SyllabusInline, BatchInline]
 
     fieldsets = (
         ('Basic Info', {
@@ -73,29 +67,7 @@ class SyllabusAdmin(admin.ModelAdmin):
     search_fields = ('course__name', 'module__name', 'trade')
     list_select_related = ('course', 'module')
 
-
-# ----------------------------
-# DETAIL SYLLABUS ADMIN
-# ----------------------------
-@admin.register(DetailSyllabus)
-class DetailSyllabusAdmin(admin.ModelAdmin):
-    list_display = ('course', 'module', 'subject', 'lecture', 'practical', 'written', 'others')
-    list_filter = ('course', 'module')
-    search_fields = ('course__name', 'module__name', 'subject__name')
-    list_select_related = ('course', 'module', 'subject')
-
-    fieldsets = (
-        ('Relations', {
-            'fields': ('course', 'module', 'subject')
-        }),
-        ('Hours Breakdown', {
-            'fields': ('lecture', 'practical', 'written', 'others')
-        }),
-        ('Notes', {
-            'classes': ('collapse',),
-            'fields': ('note',)
-        }),
-    )
+ 
 
 
 # ----------------------------

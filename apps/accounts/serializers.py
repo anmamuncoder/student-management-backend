@@ -200,6 +200,7 @@ class UserSerializer(serializers.ModelSerializer):
             # -------------------------
             # Personal Info
             # -------------------------
+            "age",
             "gender",
             "blood_group",
             "marital_status",

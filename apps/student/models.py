@@ -5,6 +5,7 @@ from kernel.models import BaseModel
 from apps.course.models import Course, Batch
 from .constants import QualificationType
 User = get_user_model()
+from django.db.models import Q
 
 
 # ----------------------------
@@ -32,12 +33,15 @@ class Student(BaseModel):
     father_phone = models.CharField(max_length=20, blank=True, null=True)
     father_address = models.TextField(blank=True, null=True)
     father_profession = models.CharField(max_length=100, blank=True, null=True)
+    father_designation = models.CharField(max_length=100, null=True, blank=True)
+    father_photo = models.ImageField(upload_to="father/", null=True, blank=True)
 
     mother_full_name = models.CharField(max_length=100, blank=True, null=True)
     mother_phone = models.CharField(max_length=20, blank=True, null=True)
     mother_address = models.TextField(blank=True, null=True)
     mother_profession = models.CharField(max_length=100, blank=True, null=True)
-
+    mother_designation = models.CharField(max_length=100, null=True, blank=True)
+    mother_photo = models.ImageField(upload_to="mother/", null=True, blank=True)
     # -------------------------
     # Passport
     # -------------------------
@@ -52,9 +56,17 @@ class Student(BaseModel):
     health_condition = models.TextField(blank=True, null=True)
     other_info = models.TextField(blank=True, null=True)
 
+    discount = models.IntegerField(default=0, null=True, blank=True)
+    previous_school = models.CharField(max_length=150, null=True, blank=True)
+    previous_class = models.CharField(max_length=50, null=True, blank=True)
+    transfer_certificate = models.FileField(upload_to="tc/", null=True, blank=True)
+
+    current_unit = models.CharField(max_length=100, null=True, blank=True)
+    parent_unit = models.CharField(max_length=100, null=True, blank=True)
+    date_of_joining = models.DateField(null=True, blank=True)
+
 
     is_active = models.BooleanField(default=False)
-    
     index_no = models.PositiveIntegerField(default=0,null=True,blank=True)
 
     def __str__(self):
@@ -123,7 +135,7 @@ class Spouse(BaseModel):
 # ----------------------------
 class Qualification(BaseModel):
 
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,  blank=True, null=True, related_name="qualifications")
 
     name = models.CharField(max_length=150)
     qualification_type = models.CharField(
@@ -148,7 +160,7 @@ class Qualification(BaseModel):
 # ----------------------------
 class BankAccount(BaseModel):
 
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True,related_name="bank_accounts")
 
     bank_name = models.CharField(max_length=150)
     account_number = models.CharField(max_length=100)
@@ -163,7 +175,7 @@ class BankAccount(BaseModel):
 # ----------------------------
 class MilitaryQualification(BaseModel):
 
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,  blank=True, null=True,related_name="military_qualifications")
 
     cadre_name = models.CharField(max_length=150)
     level = models.CharField(max_length=100)
@@ -212,7 +224,7 @@ class Award(BaseModel):
 # UN MISSION
 # ----------------------------
 class UNMission(BaseModel):
-
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True, related_name="un_missions")
     mission_name = models.CharField(max_length=150)
     from_date = models.DateField(null=True, blank=True)
     to_date = models.DateField(null=True, blank=True)
@@ -228,7 +240,7 @@ class UNMission(BaseModel):
 # COUNTRY VISITED
 # ----------------------------
 class CountryVisited(BaseModel):
-
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, blank=True, null=True, related_name="visited_country")
     country = models.CharField(max_length=100)
     from_date = models.DateField()
     to_date = models.DateField()
@@ -240,8 +252,8 @@ class CountryVisited(BaseModel):
 
 
 class BatchMembership(BaseModel):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    batch = models.ForeignKey(Batch, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE,related_name="batch_memberships")
+    batch = models.ForeignKey(Batch, on_delete=models.CASCADE,null=True, blank=True)
 
     # extra tracking fields
     joined_at = models.DateField(auto_now_add=True)
@@ -250,6 +262,20 @@ class BatchMembership(BaseModel):
     is_active = models.BooleanField(default=True)
     index_no = models.PositiveIntegerField(default=0,null=True,blank=True)
  
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['student', 'batch'],
+                name='unique_batch_per_student'
+            ),
+
+            models.UniqueConstraint(
+                fields=['student'],
+                condition=Q(batch__isnull=True),
+                name='unique_null_batch_per_student'
+            ) 
+        ]
+
     def save(self, *args, **kwargs):
         # auto set left_at from batch_end
         if self.batch and self.batch.batch_end:

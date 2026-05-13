@@ -85,6 +85,8 @@ CUSTOM_APPS = [
     'apps.course',
     'apps.exam',
     'apps.time_table',
+    'apps.training',
+    'apps.noticeboard'
 
 
 ]

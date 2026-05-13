@@ -8,31 +8,34 @@ from .serializers import (
     ExamSerializer,
     ExamAttendanceSerializer,
 )
+from kernel.viewsets import BaseViewSet
 
 
-class ExamGradeViewSet(viewsets.ModelViewSet):
+class ExamGradeViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated]
 
     queryset = ExamGrade.objects.all()
     serializer_class = ExamGradeSerializer
 
 
-class ExamScheduleViewSet(viewsets.ModelViewSet):
+class ExamScheduleViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated]
 
     queryset = ExamSchedule.objects.all().order_by("-exam_date")
     serializer_class = ExamScheduleSerializer
 
 
-class ExamViewSet(viewsets.ModelViewSet):
+class ExamViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated]
 
     queryset = Exam.objects.all()
     serializer_class = ExamSerializer
 
 
-class ExamAttendanceViewSet(viewsets.ModelViewSet):
+class ExamAttendanceViewSet(BaseViewSet):
     permission_classes = [IsAuthenticated]
 
     queryset = ExamAttendance.objects.all()
     serializer_class = ExamAttendanceSerializer
+
+    

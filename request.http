@@ -18,7 +18,7 @@ ALL_METHOD http://localhost:8020/api/v1/accounts/ranks/
 ALL_METHOD http://localhost:8020/api/v1/accounts/users/
 
 
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc4OTU4NzIzLCJpYXQiOjE3NzYzNjY3MjMsImp0aSI6ImE1YjIxZWMzYTI5YTQ3YjZhN2RmYWU4ODIwYzEzMjY3IiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.b7ISD8b3NRqPKsughR1a6t-pt1bJZXS1X1yHgfQ60Ck
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxMTE0NzQyLCJpYXQiOjE3Nzg1MjI3NDIsImp0aSI6IjNjOWMxNjQxMTEyMzQ0MzU5NmRmMmRjM2ExYWIyNDI4IiwiaWQiOiI2MWI0NjJkNi1hZTZmLTQyNTAtOTBjMS03OTA1ZWI2ZGQxODQifQ.jKHh46n_wBJ83VKYZEMT1HBz6SUIQ00sFpiHvW7XoPY
 
 ### Registration
 POST http://localhost:8020/api/v1/accounts/register/  
@@ -158,8 +158,8 @@ POST http://localhost:8020/api/v1/accounts/login/
 Content-Type: application/json
 
 {
-    "email": "teacher@gmail.com",
-    "password": "123456789"
+    "email": "admin@gmail.com",
+    "password": "0000"
 }
 
 ### Token Refresh
@@ -486,7 +486,7 @@ Content-Type: application/json
 # ---------------------------------
 ###
 GET http://localhost:8020/api/v1/students/students/
-Authorization:  Bearer {{superuser_token}}
+Authorization:  Bearer {{access_token}}
 
 ### BASE URL
 @studentUrl = http://127.0.0.1:8000/api/v1/students
@@ -607,3 +607,62 @@ Content-Type: application/json
   "batch": "934a054e-4310-426c-9da3-738e22d5019c" 
 }
 
+
+@baseURL = http://localhost:8020/api/v1
+
+###
+GET {{baseURL}}/trainings/training-programmes/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+
+###
+POST {{baseURL}}/trainings/training-programmes/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "name":"traning - programmes"
+}
+
+
+
+###
+GET {{baseURL}}/trainings/weightage-distributions/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+
+###
+POST {{baseURL}}/trainings/weightage-distributions/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    
+}
+
+###
+GET {{baseURL}}/trainings/observation-sheets/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+
+
+###
+GET {{baseURL}}/trainings/final-results/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+
+
+###
+GET {{baseURL}}/noticeboards/events/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+
+###
+GET {{baseURL}}/noticeboards/notices/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
