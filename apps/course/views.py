@@ -19,7 +19,7 @@ class BaseViewSet(ModelViewSet):
 # Course
 # -----------------------
 class CourseViewSet(BaseViewSet):
-    queryset = Course.objects.prefetch_related("syllabus_blocks__module","children")
+    queryset = Course.objects.prefetch_related("syllabus_blocks__module","children").order_by('-created_at')
     serializer_class = CourseSerializer
 
 
@@ -27,7 +27,7 @@ class CourseViewSet(BaseViewSet):
 # Subject
 # -----------------------
 class SubjectViewSet(BaseViewSet):
-    queryset = Subject.objects.all()
+    queryset = Subject.objects.all().order_by('-created_at')
     serializer_class = SubjectSerializer
 
 
@@ -35,7 +35,7 @@ class SubjectViewSet(BaseViewSet):
 # Module
 # -----------------------
 class ModuleViewSet(BaseViewSet):
-    queryset = Module.objects.all()
+    queryset = Module.objects.all().order_by('-created_at')
     serializer_class = ModuleSerializer
 
 
@@ -43,7 +43,7 @@ class ModuleViewSet(BaseViewSet):
 # Syllabus
 # -----------------------
 class SyllabusViewSet(BaseViewSet):
-    queryset = Syllabus.objects.all()
+    queryset = Syllabus.objects.all().order_by('-created_at')
     serializer_class = SyllabusSerializer
 
 
@@ -51,5 +51,5 @@ class SyllabusViewSet(BaseViewSet):
 # Batch
 # -----------------------
 class BatchViewSet(BaseViewSet):
-    queryset = Batch.objects.all()
+    queryset = Batch.objects.all().order_by('-created_at')
     serializer_class = BatchSerializer

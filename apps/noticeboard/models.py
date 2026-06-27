@@ -11,8 +11,8 @@ class Event(BaseModel):
 
     place = models.CharField(max_length=200, null=True, blank=True)
 
-    from_date = models.DateField()
-    to_date = models.DateField()
+    from_date = models.DateTimeField(null=True, blank=True)
+    to_date = models.DateTimeField(null=True, blank=True)
 
     image = models.ImageField(upload_to="events/images/", null=True, blank=True)
     file = models.FileField(upload_to="events/files/", null=True, blank=True)
@@ -28,7 +28,7 @@ class Event(BaseModel):
 class Notice(BaseModel):
 
     title = models.CharField(max_length=200)
-    date = models.DateField(null=True, blank=True)
+    date = models.DateTimeField(null=True, blank=True)
 
     notice_for = models.ForeignKey(Role, on_delete=models.SET_NULL,null=True,  blank=True, related_name="notices")
     notice = models.TextField()

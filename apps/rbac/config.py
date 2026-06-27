@@ -40,9 +40,8 @@ URL_PERMISSION_MAP = [
 
     # Exams Module  
     (r'/api/v1/exams/exams/', 'exams'),
-    (r'/api/v1/exams/exam-grades/', 'exams_grades'),
-    (r'/api/v1/exams/exam-schedules/', 'exams_schedules'),
-    (r'/api/v1/exams/exam-attendance/', 'exams_attendance'),
+    (r'/api/v1/exams/exam-grades/', 'exams_grades'), 
+    (r'/api/v1/exams/exam-results/', 'exams_results'),
 
     # Time Tables Module 
     (r'/api/v1/time_tables/govt-holidays/', 'time_tables_govt_holidays'),
@@ -268,17 +267,11 @@ INITIAL_PERMISSIONS = [
     {'name': 'Update exam grades', 'resource': 'exams_grades', 'action': 'update', 'slug': 'exams_grades:update'},
     {'name': 'Delete exam grades', 'resource': 'exams_grades', 'action': 'delete', 'slug': 'exams_grades:delete'},
 
-    # exams_schedules
-    {'name': 'View exam schedules',   'resource': 'exams_schedules', 'action': 'view',   'slug': 'exams_schedules:view'},
-    {'name': 'Create exam schedules', 'resource': 'exams_schedules', 'action': 'create', 'slug': 'exams_schedules:create'},
-    {'name': 'Update exam schedules', 'resource': 'exams_schedules', 'action': 'update', 'slug': 'exams_schedules:update'},
-    {'name': 'Delete exam schedules', 'resource': 'exams_schedules', 'action': 'delete', 'slug': 'exams_schedules:delete'},
-
-    # exams_attendance
-    {'name': 'View exam attendance',   'resource': 'exams_attendance', 'action': 'view',   'slug': 'exams_attendance:view'},
-    {'name': 'Create exam attendance', 'resource': 'exams_attendance', 'action': 'create', 'slug': 'exams_attendance:create'},
-    {'name': 'Update exam attendance', 'resource': 'exams_attendance', 'action': 'update', 'slug': 'exams_attendance:update'},
-    {'name': 'Delete exam attendance', 'resource': 'exams_attendance', 'action': 'delete', 'slug': 'exams_attendance:delete'},
+    # exams_results
+    {'name': 'View exam attendance',   'resource': 'exams_results', 'action': 'view',   'slug': 'exams_results:view'},
+    {'name': 'Create exam attendance', 'resource': 'exams_results', 'action': 'create', 'slug': 'exams_results:create'},
+    {'name': 'Update exam attendance', 'resource': 'exams_results', 'action': 'update', 'slug': 'exams_results:update'},
+    {'name': 'Delete exam attendance', 'resource': 'exams_results', 'action': 'delete', 'slug': 'exams_results:delete'},
 
 
     # --------------------------
@@ -336,67 +329,66 @@ INITIAL_PERMISSIONS = [
 ]
 
 
-
 # -------------------------------
 # INITIAL ROLES
 # -------------------------------
+# Define initial roles and their associated permissions.
 # permission.slug list 
 
-# Never create a separate 'Admin' role because superusers are already treated as admins.
-# Define initial roles and their associated permissions.
 INITIAL_ROLES = {
 
     # --------------------------
-    # ADMIN (Full Access)
+    # ADMIN — Full access to everything
     # --------------------------
     'admin': [
         # Accounts
-        'accounts_users:view','accounts_users:create','accounts_users:update','accounts_users:delete',
-        'accounts_ranks:view','accounts_ranks:create','accounts_ranks:update','accounts_ranks:delete',
+        'accounts_users:view', 'accounts_users:create', 'accounts_users:update', 'accounts_users:delete',
+        'accounts_ranks:view', 'accounts_ranks:create', 'accounts_ranks:update', 'accounts_ranks:delete',
 
         # RBAC
-        'rbac_roles:view','rbac_roles:create','rbac_roles:update','rbac_roles:delete',
+        'rbac_roles:view', 'rbac_roles:create', 'rbac_roles:update', 'rbac_roles:delete',
         'rbac_permissions:view',
-
-        # RBAC Self
         'rbac_permissions_self:view',
-        # RBAC Assign
-        'rbac_user_roles_assign:view',
-        'rbac_user_roles_assign:create',
-        'rbac_user_roles_assign:update',
-        'rbac_user_roles_assign:delete',
-
-        # Students (ALL)
-        'students_students:view','students_students:create','students_students:update','students_students:delete',
-        'students_student_types:view','students_student_types:create','students_student_types:update','students_student_types:delete',
-        'students_student_groups:view','students_student_groups:create','students_student_groups:update','students_student_groups:delete',
-        'students_activities:view','students_activities:create','students_activities:update','students_activities:delete',
-        'students_spouses:view','students_spouses:create','students_spouses:update','students_spouses:delete',
-        'students_qualifications:view','students_qualifications:create','students_qualifications:update','students_qualifications:delete',
-        'students_bank_accounts:view','students_bank_accounts:create','students_bank_accounts:update','students_bank_accounts:delete',
-        'students_military_qualifications:view','students_military_qualifications:create','students_military_qualifications:update','students_military_qualifications:delete',
-        'students_service_records:view','students_service_records:create','students_service_records:update','students_service_records:delete',
-        'students_awards:view','students_awards:create','students_awards:update','students_awards:delete',
-        'students_un_missions:view','students_un_missions:create','students_un_missions:update','students_un_missions:delete',
-        'students_countries_visited:view','students_countries_visited:create','students_countries_visited:update','students_countries_visited:delete',
-
-        # Courses (ALL)
-        'courses_courses:view','courses_courses:create','courses_courses:update','courses_courses:delete',
-        'courses_subjects:view','courses_subjects:create','courses_subjects:update','courses_subjects:delete',
-        'courses_modules:view','courses_modules:create','courses_modules:update','courses_modules:delete',
-        'courses_syllabus:view','courses_syllabus:create','courses_syllabus:update','courses_syllabus:delete',
-        'courses_batches:view','courses_batches:create','courses_batches:update','courses_batches:delete',
+        'rbac_user_roles_assign:view', 'rbac_user_roles_assign:create', 'rbac_user_roles_assign:update', 'rbac_user_roles_assign:delete',
 
         # Self account
-        'self_account:update','self_account:create',
+        'self_account:update', 'self_account:create',
 
-        # --------------------------
-        # EXAMS
-        # --------------------------
-        'exams:view','exams:create','exams:update','exams:delete',
-        'exams_grades:view','exams_grades:create','exams_grades:update','exams_grades:delete',
-        'exams_schedules:view','exams_schedules:create','exams_schedules:update','exams_schedules:delete',
-        'exams_attendance:view','exams_attendance:create','exams_attendance:update','exams_attendance:delete',
+        # Students (ALL)
+        'students_students:view', 'students_students:create', 'students_students:update', 'students_students:delete',
+        'students_student_types:view', 'students_student_types:create', 'students_student_types:update', 'students_student_types:delete',
+        'students_student_groups:view', 'students_student_groups:create', 'students_student_groups:update', 'students_student_groups:delete',
+        'students_activities:view', 'students_activities:create', 'students_activities:update', 'students_activities:delete',
+        'students_spouses:view', 'students_spouses:create', 'students_spouses:update', 'students_spouses:delete',
+        'students_qualifications:view', 'students_qualifications:create', 'students_qualifications:update', 'students_qualifications:delete',
+        'students_bank_accounts:view', 'students_bank_accounts:create', 'students_bank_accounts:update', 'students_bank_accounts:delete',
+        'students_military_qualifications:view', 'students_military_qualifications:create', 'students_military_qualifications:update', 'students_military_qualifications:delete',
+        'students_service_records:view', 'students_service_records:create', 'students_service_records:update', 'students_service_records:delete',
+        'students_awards:view', 'students_awards:create', 'students_awards:update', 'students_awards:delete',
+        'students_un_missions:view', 'students_un_missions:create', 'students_un_missions:update', 'students_un_missions:delete',
+        'students_countries_visited:view', 'students_countries_visited:create', 'students_countries_visited:update', 'students_countries_visited:delete',
+
+        # Courses (ALL)
+        'courses_courses:view', 'courses_courses:create', 'courses_courses:update', 'courses_courses:delete',
+        'courses_subjects:view', 'courses_subjects:create', 'courses_subjects:update', 'courses_subjects:delete',
+        'courses_modules:view', 'courses_modules:create', 'courses_modules:update', 'courses_modules:delete',
+        'courses_syllabus:view', 'courses_syllabus:create', 'courses_syllabus:update', 'courses_syllabus:delete',
+        'courses_batches:view', 'courses_batches:create', 'courses_batches:update', 'courses_batches:delete',
+
+        # Exams (ALL)
+        'exams:view', 'exams:create', 'exams:update', 'exams:delete',
+        'exams_grades:view', 'exams_grades:create', 'exams_grades:update', 'exams_grades:delete',
+        'exams_results:view', 'exams_results:create', 'exams_results:update', 'exams_results:delete',
+
+        # Trainings (ALL)
+        'trainings_training_programmes:view', 'trainings_training_programmes:create', 'trainings_training_programmes:update', 'trainings_training_programmes:delete',
+        'trainings_weightage_distributions:view', 'trainings_weightage_distributions:create', 'trainings_weightage_distributions:update', 'trainings_weightage_distributions:delete',
+        'trainings_observation_sheets:view', 'trainings_observation_sheets:create', 'trainings_observation_sheets:update', 'trainings_observation_sheets:delete',
+        'trainings_final_results:view', 'trainings_final_results:create', 'trainings_final_results:update', 'trainings_final_results:delete',
+
+        # Noticeboards (ALL)
+        'noticeboards_events:view', 'noticeboards_events:create', 'noticeboards_events:update', 'noticeboards_events:delete',
+        'noticeboards_notices:view', 'noticeboards_notices:create', 'noticeboards_notices:update', 'noticeboards_notices:delete',
 
         # --------------------------
         # TIME TABLES
@@ -404,134 +396,250 @@ INITIAL_ROLES = {
         'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
         'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
 
-        'trainings_training_programmes:view','trainings_training_programmes:create','trainings_training_programmes:update','trainings_training_programmes:delete',
-        'trainings_weightage_distributions:view','trainings_weightage_distributions:create','trainings_weightage_distributions:update','trainings_weightage_distributions:delete',
-        'trainings_observation_sheets:view','trainings_observation_sheets:create','trainings_observation_sheets:update','trainings_observation_sheets:delete',
-        'trainings_final_results:view','trainings_final_results:create','trainings_final_results:update','trainings_final_results:delete',
-        'noticeboards_events:view','noticeboards_events:create','noticeboards_events:update','noticeboards_events:delete',
-        'noticeboards_notices:view','noticeboards_notices:create','noticeboards_notices:update','noticeboards_notices:delete',
     ],
 
     # --------------------------
-    # STAFF (Operational user)
+    # STAFF — Operational, no delete on anything
     # --------------------------
     'staff': [
-        # Students (full manage)
-        'students_students:view','students_students:create','students_students:update',
-        'students_student_types:view','students_student_types:create','students_student_types:update',
-        'students_student_groups:view','students_student_groups:create','students_student_groups:update',
-        'students_activities:view','students_activities:create','students_activities:update',
-        'students_spouses:view','students_spouses:create','students_spouses:update',
-        'students_qualifications:view','students_qualifications:create','students_qualifications:update',
-        'students_bank_accounts:view','students_bank_accounts:create','students_bank_accounts:update',
-        'students_military_qualifications:view','students_military_qualifications:create','students_military_qualifications:update',
-        'students_service_records:view','students_service_records:create','students_service_records:update',
-        'students_awards:view','students_awards:create','students_awards:update',
-        'students_un_missions:view','students_un_missions:create','students_un_missions:update',
-        'students_countries_visited:view','students_countries_visited:create','students_countries_visited:update',
-
-        # Courses (manage but no delete)
-        'courses_courses:view','courses_courses:create','courses_courses:update',
-        'courses_subjects:view','courses_subjects:create','courses_subjects:update',
-        'courses_modules:view','courses_modules:create','courses_modules:update',
-        'courses_syllabus:view','courses_syllabus:create','courses_syllabus:update', 
-        'courses_batches:view','courses_batches:create','courses_batches:update',
-
-        # View users
+        # Accounts (view only)
         'accounts_users:view',
 
         # Self account
-        'self_account:update','self_account:create',
-
-        # Self Permission 
+        'self_account:update', 'self_account:create',
         'rbac_permissions_self:view',
 
+        # Students (view + create + update, no delete)
+        'students_students:view', 'students_students:create', 'students_students:update',
+        'students_student_types:view', 'students_student_types:create', 'students_student_types:update',
+        'students_student_groups:view', 'students_student_groups:create', 'students_student_groups:update',
+        'students_activities:view', 'students_activities:create', 'students_activities:update',
+        'students_spouses:view', 'students_spouses:create', 'students_spouses:update',
+        'students_qualifications:view', 'students_qualifications:create', 'students_qualifications:update',
+        'students_bank_accounts:view', 'students_bank_accounts:create', 'students_bank_accounts:update',
+        'students_military_qualifications:view', 'students_military_qualifications:create', 'students_military_qualifications:update',
+        'students_service_records:view', 'students_service_records:create', 'students_service_records:update',
+        'students_awards:view', 'students_awards:create', 'students_awards:update',
+        'students_un_missions:view', 'students_un_missions:create', 'students_un_missions:update',
+        'students_countries_visited:view', 'students_countries_visited:create', 'students_countries_visited:update',
+
+        # Courses (view + create + update, no delete)
+        'courses_courses:view', 'courses_courses:create', 'courses_courses:update',
+        'courses_subjects:view', 'courses_subjects:create', 'courses_subjects:update',
+        'courses_modules:view', 'courses_modules:create', 'courses_modules:update',
+        'courses_syllabus:view', 'courses_syllabus:create', 'courses_syllabus:update',
+        'courses_batches:view', 'courses_batches:create', 'courses_batches:update',
+
+        # Exams (view only)
+        'exams:view',
+        'exams_grades:view',
+        'exams_results:view',
+
+        # Trainings (view only)
         'trainings_training_programmes:view',
         'trainings_weightage_distributions:view',
         'trainings_observation_sheets:view',
         'trainings_final_results:view',
+
+        # Noticeboards (view only)
         'noticeboards_events:view',
         'noticeboards_notices:view',
+
+        # --------------------------
+        # TIME TABLES
+        # --------------------------
+        'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
+        'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
+
     ],
 
     # --------------------------
-    # STUDENT (Limited access)
-    # --------------------------
-    # 'student': [
-    #     # View own/student data (no create/delete)
-    #     'students_students:view',
-    #     'students_activities:view',
-    #     'students_qualifications:view',
-    #     'students_awards:view',
-    #     'students_un_missions:view',
-    #     'students_countries_visited:view',
-
-    #     # Courses (view only)
-    #     'courses_courses:view',
-    #     'courses_subjects:view',
-    #     'courses_modules:view',
-    #     'courses_syllabus:view', 
-    #     'courses_batches:view',
-
-    #     # Self account
-    #     'self_account:update','self_account:create',
-    #     # Self Permission 
-    #     'rbac_permissions_self:view'
-    # ],
-
-    # --------------------------
-    # LIBRARIAN (Custom limited role)
+    # LIBRARIAN — Read-heavy, limited write on syllabus
     # --------------------------
     'librarian': [
+        # Self account
+        'self_account:update', 'self_account:create',
+        'rbac_permissions_self:view',
+
         # Students (view only)
         'students_students:view',
 
-        # Courses (view + limited manage)
+        # Courses (view only + syllabus update)
         'courses_courses:view',
         'courses_subjects:view',
         'courses_modules:view',
+        'courses_syllabus:view', 'courses_syllabus:update',
 
-        # Maybe manage syllabus (optional)
-        'courses_syllabus:view','courses_syllabus:update',
+        # Exams (view only)
+        'exams:view',
+        'exams_grades:view',
+        'exams_results:view',
 
-        # Self account
-        'self_account:update','self_account:create',
-        
-        # Self Permission 
-        'rbac_permissions_self:view',
+        # Trainings (view only)
         'trainings_training_programmes:view',
         'trainings_weightage_distributions:view',
         'trainings_observation_sheets:view',
         'trainings_final_results:view',
+
+        # Noticeboards (view only)
         'noticeboards_events:view',
         'noticeboards_notices:view',
-    ], 
 
-    'teacher': [
-        # Students (view + update limited info)
-        'students_students:view',
-        'students_students:update',
-        'students_activities:view',
-        'students_activities:create',
-        'students_activities:update',
+        # --------------------------
+        # TIME TABLES
+        # --------------------------
+        'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
+        'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
+
+    ],
+
+    # --------------------------
+    # INSTRUCTORS — Academic control; manages courses, exams, trainings; no delete
+    # --------------------------
+    'instructors': [
+        # Self account
+        'self_account:update', 'self_account:create',
+        'rbac_permissions_self:view',
+
+        # Students (view + update; create/manage activities)
+        'students_students:view', 'students_students:update',
+        'students_activities:view', 'students_activities:create', 'students_activities:update',
         'students_qualifications:view',
         'students_awards:view',
 
-        # Courses (full academic control except delete)
-        'courses_courses:view','courses_courses:create','courses_courses:update',
-        'courses_subjects:view','courses_subjects:create','courses_subjects:update',
-        'courses_modules:view','courses_modules:create','courses_modules:update',
-        'courses_syllabus:view','courses_syllabus:create','courses_syllabus:update', 
-        'courses_batches:view','courses_batches:create','courses_batches:update',
+        # Courses (view + create + update, no delete)
+        'courses_courses:view', 'courses_courses:create', 'courses_courses:update',
+        'courses_subjects:view', 'courses_subjects:create', 'courses_subjects:update',
+        'courses_modules:view', 'courses_modules:create', 'courses_modules:update',
+        'courses_syllabus:view', 'courses_syllabus:create', 'courses_syllabus:update',
+        'courses_batches:view', 'courses_batches:create', 'courses_batches:update',
 
-        # Self account
-        'self_account:update','self_account:create',
+        # Exams (view + create + update, no delete)
+        'exams:view', 'exams:create', 'exams:update',
+        'exams_grades:view', 'exams_grades:create', 'exams_grades:update',
+        'exams_results:view', 'exams_results:create', 'exams_results:update',
 
-            
-        # Self Permission 
-        'rbac_permissions_self:view'
+        # Trainings (view + create + update, no delete)
+        'trainings_training_programmes:view', 'trainings_training_programmes:create', 'trainings_training_programmes:update',
+        'trainings_weightage_distributions:view', 'trainings_weightage_distributions:create', 'trainings_weightage_distributions:update',
+        'trainings_observation_sheets:view', 'trainings_observation_sheets:create', 'trainings_observation_sheets:update',
+        'trainings_final_results:view', 'trainings_final_results:create', 'trainings_final_results:update',
+
+        # Noticeboards (view only)
+        'noticeboards_events:view',
+        'noticeboards_notices:view',
+
+        # --------------------------
+        # TIME TABLES
+        # --------------------------
+        'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
+        'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
+
     ],
+
+    # --------------------------
+    # SI (Senior Instructor) — Same scope as instructors
+    # --------------------------
+    'si': [
+        # Self account
+        'self_account:update', 'self_account:create',
+        'rbac_permissions_self:view',
+
+        # Students (view + update; create/manage activities)
+        'students_students:view', 'students_students:update',
+        'students_activities:view', 'students_activities:create', 'students_activities:update',
+        'students_qualifications:view',
+        'students_awards:view',
+
+        # Courses (view + create + update, no delete)
+        'courses_courses:view', 'courses_courses:create', 'courses_courses:update',
+        'courses_subjects:view', 'courses_subjects:create', 'courses_subjects:update',
+        'courses_modules:view', 'courses_modules:create', 'courses_modules:update',
+        'courses_syllabus:view', 'courses_syllabus:create', 'courses_syllabus:update',
+        'courses_batches:view', 'courses_batches:create', 'courses_batches:update',
+
+        # Exams (view + create + update, no delete)
+        'exams:view', 'exams:create', 'exams:update',
+        'exams_grades:view', 'exams_grades:create', 'exams_grades:update',
+        'exams_results:view', 'exams_results:create', 'exams_results:update',
+
+        # Trainings (view + create + update, no delete)
+        'trainings_training_programmes:view', 'trainings_training_programmes:create', 'trainings_training_programmes:update',
+        'trainings_weightage_distributions:view', 'trainings_weightage_distributions:create', 'trainings_weightage_distributions:update',
+        'trainings_observation_sheets:view', 'trainings_observation_sheets:create', 'trainings_observation_sheets:update',
+        'trainings_final_results:view', 'trainings_final_results:create', 'trainings_final_results:update',
+
+        # Noticeboards (view only)
+        'noticeboards_events:view',
+        'noticeboards_notices:view',
+
+        # --------------------------
+        # TIME TABLES
+        # --------------------------
+        'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
+        'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
+
+    ],
+
+    # --------------------------
+    # OIC (Officer In Charge) — Same scope as instructors
+    # --------------------------
+    'oic': [
+        # Self account
+        'self_account:update', 'self_account:create',
+        'rbac_permissions_self:view',
+
+        # Students (view + update; create/manage activities)
+        'students_students:view', 'students_students:update',
+        'students_activities:view', 'students_activities:create', 'students_activities:update',
+        'students_qualifications:view',
+        'students_awards:view',
+
+        # Courses (view + create + update, no delete)
+        'courses_courses:view', 'courses_courses:create', 'courses_courses:update',
+        'courses_subjects:view', 'courses_subjects:create', 'courses_subjects:update',
+        'courses_modules:view', 'courses_modules:create', 'courses_modules:update',
+        'courses_syllabus:view', 'courses_syllabus:create', 'courses_syllabus:update',
+        'courses_batches:view', 'courses_batches:create', 'courses_batches:update',
+
+        # Exams (view + create + update, no delete)
+        'exams:view', 'exams:create', 'exams:update',
+        'exams_grades:view', 'exams_grades:create', 'exams_grades:update',
+        'exams_results:view', 'exams_results:create', 'exams_results:update',
+
+        # Trainings (view + create + update, no delete)
+        'trainings_training_programmes:view', 'trainings_training_programmes:create', 'trainings_training_programmes:update',
+        'trainings_weightage_distributions:view', 'trainings_weightage_distributions:create', 'trainings_weightage_distributions:update',
+        'trainings_observation_sheets:view', 'trainings_observation_sheets:create', 'trainings_observation_sheets:update',
+        'trainings_final_results:view', 'trainings_final_results:create', 'trainings_final_results:update',
+
+        # Noticeboards (view only)
+        'noticeboards_events:view',
+        'noticeboards_notices:view',
+
+        # --------------------------
+        # TIME TABLES
+        # --------------------------
+        'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
+        'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
+
+    ],
+    'faculty-members': [
+        # Self account
+        'self_account:update', 'self_account:create',
+        'rbac_permissions_self:view',
+
+        # Noticeboards (view only)
+        'noticeboards_events:view',
+        'noticeboards_notices:view',
+
+        # --------------------------
+        # TIME TABLES
+        # --------------------------
+        'time_tables_govt_holidays:view','time_tables_govt_holidays:create','time_tables_govt_holidays:update','time_tables_govt_holidays:delete',
+        'time_tables_training_schedules:view','time_tables_training_schedules:create','time_tables_training_schedules:update','time_tables_training_schedules:delete',
+
+    ]
+
 }
-
-
 

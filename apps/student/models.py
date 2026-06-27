@@ -260,23 +260,33 @@ class BatchMembership(BaseModel):
     left_at = models.DateField(null=True, blank=True)
 
     is_active = models.BooleanField(default=True)
-    index_no = models.PositiveIntegerField(default=0,null=True,blank=True)
+    index_no = models.PositiveIntegerField(null=True,blank=True)
  
     class Meta:
         constraints = [
+
+            # same student + same batch not allowed
             models.UniqueConstraint(
                 fields=['student', 'batch'],
                 name='unique_batch_per_student'
             ),
 
+            # only one NULL batch per student
             models.UniqueConstraint(
                 fields=['student'],
                 condition=Q(batch__isnull=True),
                 name='unique_null_batch_per_student'
-            ) 
+            ),
+
+            # same batch -> unique index_no
+            models.UniqueConstraint(
+                fields=['batch', 'index_no'],
+                name='unique_index_no_per_batch'
+            )
         ]
 
     def save(self, *args, **kwargs):
+
         # auto set left_at from batch_end
         if self.batch and self.batch.batch_end:
             self.left_at = self.batch.batch_end

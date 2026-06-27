@@ -1,16 +1,12 @@
 from django.contrib import admin
-
 from .models import (
     TrainingProgramme,
     WeightageDistribution,
     ObservationSheet,
-    FinalResult
+    FinalResult,
 )
 
 
-# -----------------------------
-# Training Programme
-# -----------------------------
 @admin.register(TrainingProgramme)
 class TrainingProgrammeAdmin(admin.ModelAdmin):
     list_display = (
@@ -23,68 +19,55 @@ class TrainingProgrammeAdmin(admin.ModelAdmin):
         "end_date",
         "created_at",
     )
-
     list_filter = (
         "course",
         "batch",
         "start_date",
         "end_date",
     )
-
     search_fields = (
         "name",
         "code",
         "course__name",
         "batch__name",
     )
-
+    readonly_fields = (
+        "id",
+        "created_at",
+        "updated_at",
+    )
     ordering = ("-created_at",)
 
-    autocomplete_fields = (
-        "course",
-        "batch",
-    )
 
-
-# -----------------------------
-# Weightage Distribution
-# -----------------------------
 @admin.register(WeightageDistribution)
 class WeightageDistributionAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "training_programme",
-        "topic",
-        "total_marks",
+        "subject",
+        "full_mark",
+        "pass_mark",
         "practical_marks",
         "theory_marks",
+        "wt",
         "percentage",
+        "observation_by",
     )
-
     list_filter = (
-        "course",
-        "batch",
-        "training_programme",
+        "subject",
+        "observation_by",
     )
-
     search_fields = (
+        "subject__name",
         "topic",
-        "training_programme__name",
-        "course__name",
     )
-
+    readonly_fields = (
+        "id",
+        "created_at",
+        "updated_at",
+    )
     ordering = ("-created_at",)
 
-    autocomplete_fields = (
-        "course",
-        "batch",
-        "training_programme",
-    )
 
-
-# -----------------------------
-# Observation Sheet
-# -----------------------------
 @admin.register(ObservationSheet)
 class ObservationSheetAdmin(admin.ModelAdmin):
     list_display = (
@@ -94,36 +77,30 @@ class ObservationSheetAdmin(admin.ModelAdmin):
         "batch",
         "index_no",
         "observation_date",
+        "observation_time",
         "observation_mark",
         "point",
         "observation_by",
     )
-
     list_filter = (
         "course",
         "batch",
         "observation_date",
-    )
-
-    search_fields = (
-        "student__user__first_name",
-        "student__user__last_name",
-        "student__index_no",
-    )
-
-    ordering = ("-observation_date",)
-
-    autocomplete_fields = (
-        "course",
-        "batch",
-        "student",
         "observation_by",
     )
+    search_fields = (
+        "student__name",
+        "student__student_id",
+        "remark",
+    )
+    readonly_fields = (
+        "id",
+        "created_at",
+        "updated_at",
+    )
+    ordering = ("-created_at",)
 
 
-# -----------------------------
-# Final Result
-# -----------------------------
 @admin.register(FinalResult)
 class FinalResultAdmin(admin.ModelAdmin):
     list_display = (
@@ -133,32 +110,29 @@ class FinalResultAdmin(admin.ModelAdmin):
         "batch",
         "training_programme",
         "obtained_marks",
+        "total_marks",
         "final_percentage",
         "grade",
         "result_status",
+        "published_by",
         "published_at",
     )
-
     list_filter = (
         "course",
         "batch",
-        "result_status",
-        "grade",
-    )
-
-    search_fields = (
-        "student__user__first_name",
-        "student__user__last_name",
-        "student__index_no",
-        "grade",
-    )
-
-    ordering = ("-published_at",)
-
-    autocomplete_fields = (
-        "course",
-        "batch",
-        "student",
         "training_programme",
-        "published_by",
+        "result_status",
+        "published_at",
     )
+    search_fields = (
+        "student__name",
+        "student__student_id",
+        "grade",
+    )
+    readonly_fields = (
+        "id",
+        "created_at",
+        "updated_at",
+        "published_at",
+    )
+    ordering = ("-created_at",)

@@ -211,3 +211,74 @@ class CountryVisitedAdmin(admin.ModelAdmin):
     list_filter = ('country',)
     search_fields = ('country',)
     date_hierarchy = 'from_date'
+
+
+
+
+
+from django.contrib import admin
+from .models import BatchMembership
+
+
+@admin.register(BatchMembership)
+class BatchMembershipAdmin(admin.ModelAdmin):
+
+    # -------------------------
+    # LIST DISPLAY
+    # -------------------------
+    list_display = (
+        "id",
+        "student",
+        "batch",
+        "index_no",
+        "is_active",
+        "joined_at",
+        "left_at",
+    )
+
+    # -------------------------
+    # SEARCH
+    # -------------------------
+    search_fields = (
+        "student__user__email",
+        "student__user__username",
+        "batch__name",
+        "index_no",
+    )
+
+    # -------------------------
+    # FILTER
+    # -------------------------
+    list_filter = (
+        "batch",
+        "is_active",
+        "joined_at",
+        "left_at",
+    )
+
+    # -------------------------
+    # ORDERING
+    # -------------------------
+    ordering = ("-created_at",)
+
+    # -------------------------
+    # EDIT IN LIST VIEW
+    # -------------------------
+    list_editable = ("index_no", "is_active")
+
+    # -------------------------
+    # READONLY FIELDS
+    # -------------------------
+    readonly_fields = ("joined_at", "left_at")
+
+    # -------------------------
+    # FIELD LAYOUT
+    # -------------------------
+    fieldsets = (
+        ("Basic Info", {
+            "fields": ("student", "batch", "index_no", "is_active")
+        }),
+        ("Dates", {
+            "fields": ("joined_at", "left_at")
+        }),
+    )

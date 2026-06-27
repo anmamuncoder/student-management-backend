@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from .models import Student, StudentType, StudentGroup, Activity, Spouse, Qualification, BankAccount, MilitaryQualification, ServiceRecord, Award, UNMission, CountryVisited, BatchMembership
 
 
@@ -164,3 +165,4 @@ class StudentSerializer(ModelSerializer):
     class Meta:
         model = Student
         fields = "__all__"
+        

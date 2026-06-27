@@ -22,7 +22,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # -------------------------------
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", default=False)
-
+PRODUCTION = env.bool("PRODUCTION", default=False)
 
 # Allow all hosts during development
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['127.0.0.1', 'localhost'])
@@ -30,8 +30,7 @@ CSRF_TRUSTED_ORIGINS = [
     # Add your frontend URLs here
     "http://localhost:5173",    # For development with Vite React
     "http://127.0.0.1:5173",    # For development with Vite React
-    'http://192.168.110.2:80/',
-    'http://192.168.110.2:81/',
+    'http://192.168.110.2:80/', 
     
     # Add production frontend & backend URL when deploying
      
@@ -173,56 +172,24 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 # -------------------------------
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if PRODUCTION:
+    DATABASES = {
+        "default": {
+            "ENGINE": env("MYSQL_ENGINE", default="django.db.backends.mysql"),
+            "NAME": env("MYSQL_NAME", default="dipstick_backend_db"),
+            "USER": env("MYSQL_USER", default="dipstick_django"),
+            "PASSWORD": env("MYSQL_PASSWORD", default="djangoPass@123"),
+            "HOST": env("MYSQL_HOST", default="db"),
+            "PORT": env("MYSQL_PORT", default="3306"),
+        }
     }
-}
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'dipstick_backend_db',
-#         'USER': 'dipstick_django',
-#         'PASSWORD': 'djangoPass@123',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': env("DB_NAME"),
-#         'USER': env("DB_USER"),
-#         'PASSWORD': env("DB_PASSWORD"),
-#         'HOST': env("DB_HOST", default="localhost"),
-#         'PORT': env("DB_PORT", default="3306"),
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'dipstick_db',
-#         'USER': 'django_user',
-#         'PASSWORD': '1234',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': env('POSTGRES_ENGINE'),
-#         'NAME': env('POSTGRES_NAME'),
-#         'USER': env('POSTGRES_USER'),
-#         'PASSWORD': env('POSTGRES_PASSWORD'),
-#         'HOST': env('POSTGRES_HOST', default='db'),  # db service in docker-compose
-#         'PORT': env('POSTGRES_PORT', default='5432'),
-#     }
-# }
-
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 # -------------------------------
 # Password Validators

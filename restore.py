@@ -4,9 +4,8 @@ import requests
 # -----------------------
 # CONFIG
 # -----------------------
-BASE_URL = "http://localhost:8020/api/v1"
-TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxMTE2Mjg3LCJpYXQiOjE3Nzg1MjQyODcsImp0aSI6IjUwOTM1YTQxYWE4ZTRmZmY5NWY3YTNhNGU5NDRmNjJmIiwiaWQiOiJjOTNhMDM2NS02YzcxLTQ5YTItYTZlNS1kNmE3YzgyMWViNWYifQ.YO94v1MpUdVjJRhbgLX5t60QvCESRqxXVfeyJSjT4kE"
-
+BASE_URL = "http://localhost:8000/api/v1"
+TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzg0MTIxNjEyLCJpYXQiOjE3ODE1Mjk2MTIsImp0aSI6ImU3Y2Y2NDIyZGE1ZjQ3Njk5MTJjYTEwY2ZjNjE2ZGFjIiwiaWQiOiJiMWFiY2M3ZC0yZDU1LTQxZDEtYWEyNi1kMmI0MDZjMjY3ZDYifQ.iG3LdQr25UcvdAEkcCZIiGznAn2_by1l0jHqHYR00rk"
 
 STATE_FILE = "restore_state.json"
 
@@ -36,6 +35,24 @@ batch_map = {}
 user_map = {}
 student_map = {}
 batch_membership_map = {}
+
+# global serial number
+index_no_counter = 1
+
+
+
+teacher_map = {}   # old teacher id → new user id
+MARITAL_STATUS_TEACHER_MAP = {
+    "yes":      "married",
+    "no":       "single",
+    "married":  "married",
+    "single":   "single",
+    "divorced": "divorced",
+    "widowed":  "widowed",
+}
+
+exam_grade_map = {}
+event_map = {}
 
 # -----------------------
 # NORMALIZERS
@@ -344,14 +361,19 @@ def create_normal_user(s):
 # BATCH MEMBERSHIP
 # -----------------------
 def create_batch_membership(student_id, batch_id=None, is_active=True):
+    global index_no_counter 
+
     payload = {
         "student": student_id,
         "batch": batch_id,
-        "is_active": is_active
+        "is_active": is_active,
+        "index_no":index_no_counter
     }
     res = post(f"{BASE_URL}/students/batch-memberships/", payload, "BatchMembership")
     if res:
         batch_membership_map[student_id] = res["id"]
+        # next serial
+        index_no_counter += 1
 
 
 # -----------------------
@@ -361,7 +383,7 @@ def create_students():
     url = f"{BASE_URL}/students/students/"
 
     # MAIN — full field mapping to Student model
-    for s in data["main_students"]:
+    for index, s in enumerate(data["main_students"], start=1):
         payload = {
             "user": user_map.get(s["id"]),
             "student_type": student_type_map.get(s.get("type_id")),
@@ -393,6 +415,7 @@ def create_students():
             "discount": s.get("discount_id") or 0,
 
             "is_active": True,
+            "index_no": index
         }
 
         res = post(url, payload, "Main Student")
@@ -440,25 +463,168 @@ def create_students():
                 if batch_id:
                     create_batch_membership(student_id, batch_id, False)
 
+def normalize_wing(value):
+    if not value:
+        return None
+
+    value = value.strip().lower()
+
+    mapping = {
+        "army wing": "army",
+        "army": "army",
+
+        "navy wing": "navy",
+        "navy": "navy",
+
+        "air force wing": "air_force",
+        "air force": "air_force",
+
+        "civil wing": "civil",
+        "civil": "civil",
+
+        "school wing": "school",
+        "school": "school",
+    }
+
+    return mapping.get(value)
+
+def normalize_marital_status_teacher(val):
+    if not val:
+        return None
+    return MARITAL_STATUS_TEACHER_MAP.get(val.strip().lower()) or None
+ 
+
+# TEACHERS  →  accounts/users/  with role_slug=instructors
+def create_teachers():
+    for t in data.get("teachers", []):
+        key = t["id"]
+ 
+        # Rank lookup — designation_id maps to rank_map
+        rank_id_raw = t.get("designation_id")
+        rank_id = None
+        if rank_id_raw:
+            try:
+                rank_id = rank_map.get(int(rank_id_raw))
+            except (ValueError, TypeError):
+                pass
+ 
+        # Fallback email
+        email = t.get("email") or f"teacher{key}@dipstick.com"
+ 
+        payload = {
+            # Auth
+            "email":            email,
+            "password":         "12345678",
+            "role_slug":        "instructors",       # ← assigns instructor role
+ 
+            # Identity
+            "full_name":        t.get("name"),
+            "short_name":       t.get("sname") or None,
+            "personal_number":  t.get("pnumber") or None,
+ 
+            # Rank
+            "rank":             rank_id,
+ 
+            # Contact
+            "phone":            t.get("phone") or None,
+            "national_id":      t.get("national_id") or None,
+ 
+            # Personal
+            "gender":           t.get("gender") or None,
+            "blood_group":      normalize_blood_group(t.get("blood_group")),
+            "marital_status":   normalize_marital_status_teacher(t.get("mstatus")),
+            "date_of_marriage": clean_date(t.get("dom")),
+            "religion":         t.get("religion") or None,
+ 
+            # Birth
+            "birth_date":       clean_date(t.get("dob")),
+            "place_of_birth":   clean_date(t.get("pob")),   # pob may be "0000-00-00" → clean_date returns None
+            "country":          t.get("country") or None,
+ 
+            # Address
+            "present_address":  t.get("present_address") or None,
+            "permanent_address":t.get("permanent_address") or None,
+ 
+            # Organization
+            "current_unit":     t.get("cunit") or None,
+            "parent_unit_auth": t.get("punit") or None,
+            "wing":             normalize_wing(t.get("wing")),
+            "appointment":      t.get("appointment") or None,
+            "joining_date":     clean_date(t.get("joining_date")),
+            "date_of_enrolment":clean_date(t.get("doe")),
+            "current_status":   "active" if t.get("status") == 1 else "inactive",
+        }
+ 
+        res = post(f"{BASE_URL}/accounts/users/", payload, f"Teacher id={key}")
+        if res:
+            teacher_map[key] = res["id"]
+            print(f"  ✓ Teacher created: {t.get('name')} → user_id={res['id']}")
+ 
+
+
+# -----------------------
+# EXAM GRADES
+# -----------------------
+def create_exam_grades():
+    for g in data.get("grades", []):  # adjust key if different in data.json
+        payload = {
+            "b_side_grade": g.get("bside_grade"),
+            "y_side_grade": g.get("yside_grade"),
+            "grade_point":  g.get("point"),
+            "mark_from":    int(g["mark_from"]),
+            "mark_to":      int(g["mark_to"]),
+            "note":         g.get("note") or None,
+        }
+
+        res = post(f"{BASE_URL}/exams/exam-grades/", payload, f"ExamGrade id={g['id']}")
+        if res:
+            exam_grade_map[g["id"]] = res["id"]
+            print(f"  ✓ ExamGrade created: {g.get('bside_grade')} ({g['mark_from']}-{g['mark_to']}) → id={res['id']}")
+
+
+
+# -----------------------
+# EVENTS
+# -----------------------
+def create_events():
+    for e in data.get("events", []):
+        payload = {
+            "title":          e.get("title"),
+            "place":          e.get("event_place") or None,
+            "from_date":      clean_date(e.get("event_from")),
+            "to_date":        clean_date(e.get("event_to")),
+            "note":           e.get("note") or None,
+            "is_view_on_web": bool(e.get("is_view_on_web", 1)),
+        }
+
+        res = post(f"{BASE_URL}/noticeboards/events/", payload, f"Event id={e['id']}")
+        if res:
+            event_map[e["id"]] = res["id"]
+            print(f"  ✓ Event created: {e.get('title')} → id={res['id']}")
+
 
 # -----------------------
 # SAVE STATE
 # -----------------------
 def save_state():
     state = {
-        "rank_map": rank_map,
-        "student_type_map": student_type_map,
-        "course_map": course_map,
-        "batch_map": batch_map,
-        "user_map": {str(k): v for k, v in user_map.items()},
-        "student_map": {str(k): v for k, v in student_map.items()},
+        "rank_map":             rank_map,
+        "student_type_map":     student_type_map,
+        "course_map":           course_map,
+        "batch_map":            batch_map,
+        "user_map":             {str(k): v for k, v in user_map.items()},
+        "student_map":          {str(k): v for k, v in student_map.items()},
         "batch_membership_map": {str(k): v for k, v in batch_membership_map.items()},
+        "teacher_map":          {str(k): v for k, v in teacher_map.items()}, 
+        "exam_grade_map": {str(k): v for k, v in exam_grade_map.items()},
+        "event_map": {str(k): v for k, v in event_map.items()},
     }
-
+ 
     with open(STATE_FILE, "w") as f:
         json.dump(state, f, indent=4)
-
+ 
     print("STATE SAVED")
+
 
 
 # -----------------------
@@ -474,7 +640,9 @@ if __name__ == "__main__":
 
     create_users()
     create_students()
-
+    create_teachers()        
+    create_exam_grades()
+    create_events()
     save_state()
 
     print("RESTORE COMPLETED")

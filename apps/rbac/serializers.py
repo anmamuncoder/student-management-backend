@@ -22,12 +22,32 @@ class RoleSerializer(serializers.ModelSerializer):
         slug_field='slug',
         queryset=Permission.objects.all()
     )
+
+    PROTECTED_ROLES = {
+        "admin",
+        "instructors",
+        "oic",
+        "si",
+        "staff",
+        "librarian",
+    }
+
     class Meta:
         model = Role
-        fields = ['id', 'name', 'slug', 'permissions', 'description', 'created_at', 'updated_at']
+        fields = ['id', 'name', 'slug','group', 'permissions', 'description', 'created_at', 'updated_at']
         read_only_fields = ['slug', 'created_at', 'updated_at']
 
- 
+    def validate(self, attrs):
+        instance = getattr(self, "instance", None)
+
+        if instance and instance.slug in self.PROTECTED_ROLES:
+            if "name" in attrs and attrs["name"] != instance.name:
+                raise serializers.ValidationError({
+                    "name": "This role name cannot be changed."
+                })
+
+        return attrs
+
 class UserRoleSerializer(ModelSerializer):
     # Accept role by slug
     

@@ -12,8 +12,9 @@ from apps.accounts.models import User
 # Inner Classess
 from .models import Permission, Role, UserRole
 from .serializers import PermissionSerializers, RoleSerializer, UserRoleSerializer
- 
- 
+from rest_framework.response import Response
+from rest_framework import status
+
 class SelfPermissionView(APIView):
     """
     Authenticated User can manage permissions.
@@ -62,10 +63,29 @@ class RoleViewSet(ModelViewSet):
     permission_classes = [IsAdminUser]
     lookup_field = "slug"
 
+    PROTECTED_ROLES = {
+        "admin",
+        "instructors",
+        "oic",
+        "si",
+        "staff",
+        "librarian",
+    }
+
+    def destroy(self, request, *args, **kwargs):
+        role = self.get_object()
+
+        if role.slug in self.PROTECTED_ROLES:
+            return Response(
+                {"detail": f"'{role.name}' role cannot be deleted."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        return super().destroy(request, *args, **kwargs)
+    
 class UserRoleViewSet(ModelViewSet):
     """Only admins/superusers can manage permissions."""
 
     queryset = UserRole.objects.all()
     serializer_class = UserRoleSerializer
     permission_classes = [IsAdminUser]
-    

@@ -1,135 +1,139 @@
-# --------------------------
-# Core Django
-# --------------------------
-Django==6.0.2
-django-cors-headers==4.9.0
-django-environ==0.13.0
-django-debug-toolbar==6.2.0
-django-extensions==4.1
-django-filter==25.2
-django-jazzmin==3.0.3
 
-# --------------------------
-# Django REST Framework
-# --------------------------
+# For CPanle Server
+# #-----------------------------------------------------
+asgiref==3.11.1
+attrs==25.4.0
+django==4.2
+django-cors-headers==4.9.0
+django-filter==23.5
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1
-rest-framework-simplejwt==0.0.2
 drf-spectacular==0.29.0
-
-# --------------------------
-# Database / ORM
-# --------------------------
-psycopg2-binary==2.9.11
-sqlparse==0.5.5
-
-# --------------------------
-# Celery / Messaging / Task Queue
-# --------------------------
-celery==5.6.2
-amqp==5.3.1
-billiard==4.2.4
-kombu==5.6.2
-vine==5.1.0
-asgiref==3.11.1
-
-# --------------------------
-# Caching / Redis
-# --------------------------
-redis==7.2.1
-
-# --------------------------
-# Testing / Dev Tools
-# --------------------------
-pytest==9.0.2
-pytest-django==4.12.0
-pytest-cov==7.0.0
-coverage==7.13.4
-factory_boy==3.3.3
-Faker==40.5.1
-
-# --------------------------
-# Gunicorn / Server
-# --------------------------
-gunicorn==25.1.0
-
-# --------------------------
-# CLI Tools / Utilities
-# --------------------------
-click==8.3.1
-click-didyoumean==0.3.1
-click-plugins==1.1.1.2
-click-repl==0.3.0
-prompt_toolkit==3.0.52
-iniconfig==2.3.0
-packaging==26.0
 inflection==0.5.1
-
-# --------------------------
-# JSON / YAML / API
-# --------------------------
-PyJWT==2.11.0
 jsonschema==4.26.0
 jsonschema-specifications==2025.9.1
+pillow==12.1.1
+psycopg2-binary==2.9.11
+PyJWT==2.11.0
+PyMySQL==1.1.2
+python-decouple==3.8
 PyYAML==6.0.3
-uritemplate==4.2.0
 referencing==0.37.0
 rpds-py==0.30.0
-
-# --------------------------
-# Dates / Time
-# --------------------------
-python-dateutil==2.9.0.post0
-tzdata==2025.3
-tzlocal==5.3.1
-six==1.17.0
+sqlparse==0.5.5
 typing_extensions==4.15.0
-wcwidth==0.6.0
-Pygments==2.19.2
+uritemplate==4.2.0
+whitenoise==6.11.0
+django-environ==0.13.0
+# #-----------------------------------------------------
+ 
 
-# --------------------------
-# Static Files / Middleware
-# --------------------------
-whitenoise==6.12.0
-pillow==12.1.1
-pluggy==1.6.0
-attrs==25.4.0
 
-# --------------------------
-# Used for request tracking
-# --------------------------
-user-agents==2.2.0 # Parses the User-Agent string to identify device type, browser, and operating system.
-geoip2==5.2.0 # Converts an IP address into geographic data like country and city for location tracking.
+# For Docker Or Local PC
+# # --------------------------
+# # Core Django
+# # --------------------------
+# Django==6.0.2
+# django-cors-headers==4.9.0
+# django-environ==0.13.0
+# django-debug-toolbar==6.2.0
+# django-extensions==4.1
+# django-filter==25.2
+# django-jazzmin==3.0.3
+
+# # --------------------------
+# # Django REST Framework
+# # --------------------------
+# djangorestframework==3.16.1
+# djangorestframework_simplejwt==5.5.1
+# rest-framework-simplejwt==0.0.2
+# drf-spectacular==0.29.0
+
+# # --------------------------
+# # Database / ORM
+# # --------------------------
+# psycopg2-binary==2.9.11
+# sqlparse==0.5.5
+
+# # --------------------------
+# # Celery / Messaging / Task Queue
+# # --------------------------
+# celery==5.6.2
+# amqp==5.3.1
+# billiard==4.2.4
+# kombu==5.6.2
+# vine==5.1.0
+# asgiref==3.11.1
+
+# # --------------------------
+# # Caching / Redis
+# # --------------------------
+# redis==7.2.1
+
+# # --------------------------
+# # Testing / Dev Tools
+# # --------------------------
+# pytest==9.0.2
+# pytest-django==4.12.0
+# pytest-cov==7.0.0
+# coverage==7.13.4
+# factory_boy==3.3.3
+# Faker==40.5.1
+
+# # --------------------------
+# # Gunicorn / Server
+# # --------------------------
+# gunicorn==25.1.0
+
+# # --------------------------
+# # CLI Tools / Utilities
+# # --------------------------
+# click==8.3.1
+# click-didyoumean==0.3.1
+# click-plugins==1.1.1.2
+# click-repl==0.3.0
+# prompt_toolkit==3.0.52
+# iniconfig==2.3.0
+# packaging==26.0
+# inflection==0.5.1
+
+# # --------------------------
+# # JSON / YAML / API
+# # --------------------------
+# PyJWT==2.11.0
+# jsonschema==4.26.0
+# jsonschema-specifications==2025.9.1
+# PyYAML==6.0.3
+# uritemplate==4.2.0
+# referencing==0.37.0
+# rpds-py==0.30.0
+
+# # --------------------------
+# # Dates / Time
+# # --------------------------
+# python-dateutil==2.9.0.post0
+# tzdata==2025.3
+# tzlocal==5.3.1
+# six==1.17.0
+# typing_extensions==4.15.0
+# wcwidth==0.6.0
+# Pygments==2.19.2
+
+# # --------------------------
+# # Static Files / Middleware
+# # --------------------------
+# whitenoise==6.12.0
+# pillow==12.1.1
+# pluggy==1.6.0
+# attrs==25.4.0
+
+# # --------------------------
+# # Used for request tracking
+# # --------------------------
+# user-agents==2.2.0 # Parses the User-Agent string to identify device type, browser, and operating system.
+# geoip2==5.2.0 # Converts an IP address into geographic data like country and city for location tracking.
 
 
 # For MySQL support, if needed in the future:
 # django<4.2
 # PyMySQL==1.1.2
-
-
-# #-----------------------------------------------------
-# asgiref==3.11.1
-# attrs==25.4.0
-# django==4.2
-# django-cors-headers==4.9.0
-# django-filter==23.5
-# djangorestframework==3.16.1
-# djangorestframework_simplejwt==5.5.1
-# drf-spectacular==0.29.0
-# inflection==0.5.1
-# jsonschema==4.26.0
-# jsonschema-specifications==2025.9.1
-# pillow==12.1.1
-# psycopg2-binary==2.9.11
-# PyJWT==2.11.0
-# PyMySQL==1.1.2
-# python-decouple==3.8
-# PyYAML==6.0.3
-# referencing==0.37.0
-# rpds-py==0.30.0
-# sqlparse==0.5.5
-# typing_extensions==4.15.0
-# uritemplate==4.2.0
-# whitenoise==6.11.0
-# django-environ==0.13.0
-# #-----------------------------------------------------

@@ -1,6 +1,4 @@
-from django.db import models
-from apps.course.models import Course, Batch
-from apps.student.models import Student
+from django.db import models 
 
 from kernel.models import BaseModel
 
@@ -11,8 +9,8 @@ from .constants import ResultStatus
 
 # Create your models here.
 class TrainingProgramme(BaseModel):
-    course = models.ForeignKey(Course,on_delete=models.CASCADE, blank=True, null=True,related_name="training_programme")
-    batch = models.ForeignKey(Batch,on_delete=models.CASCADE, blank=True, null=True, related_name="training_programme")
+    course = models.ForeignKey("course.Course",on_delete=models.CASCADE, blank=True, null=True,related_name="training_programme")
+    batch = models.ForeignKey("course.Batch",on_delete=models.CASCADE, blank=True, null=True, related_name="training_programme")
  
     name = models.CharField(max_length=200,null=True,blank=True)
     code = models.CharField(max_length=50,null=True,blank=True)
@@ -27,37 +25,49 @@ class TrainingProgramme(BaseModel):
     document = models.FileField(upload_to="syllabus/documents/",null=True, blank=True)
     
     def __str__(self):
-        return self.name
+        return self.name or "Unnamed Training Programme"
 
 
 class WeightageDistribution(BaseModel):
-    course = models.ForeignKey(Course,on_delete=models.CASCADE, blank=True, null=True,related_name="weightage_distributions")
-    batch = models.ForeignKey(Batch,on_delete=models.CASCADE, blank=True, null=True, related_name="weightage_distributions")
-    training_programme = models.ForeignKey(TrainingProgramme,on_delete=models.CASCADE, blank=True, null=True, related_name="weightage_distributions")
+    subject = models.OneToOneField("course.Subject",on_delete=models.CASCADE, null=True,related_name="weightage_distribution")
+
+    full_mark = models.PositiveIntegerField(default=0)
+    pass_mark = models.PositiveIntegerField(default=0)
+    wt = models.FloatField(default=0.0)
+ 
+    practical_marks = models.PositiveIntegerField(default=0)
+    theory_marks = models.PositiveIntegerField(default=0)
+    percentage = models.FloatField(default=0.0)
 
     topic = models.CharField(max_length=200,null=True,blank=True)
     description = models.TextField(null=True, blank=True)
-
-    total_marks = models.PositiveIntegerField(default=0)
-    practical_marks = models.PositiveIntegerField(default=0)
-    theory_marks = models.PositiveIntegerField(default=0)
-
-    percentage = models.FloatField(default=0.0)
+    note = models.TextField(null=True, blank=True)
 
     # -------------------------
     # FILE UPLOAD FIELDS
     # -------------------------
     document = models.FileField(upload_to="syllabus/documents/",null=True, blank=True)
+    observation_by= models.ForeignKey(User,on_delete=models.SET_NULL,null=True,blank=True,related_name="created_weightage_distributions")
 
     def __str__(self):
-        return f"{self.training_programme.name} - {self.topic}"
+        if self.subject and self.full_mark and self.wt:
+            return f"{self.subject.name} - FM {self.full_mark} WT {self.wt}"
+
+        if self.subject:
+            return f"{self.subject.name}"
+
+        return "Weightage Distribution"
     
+    class Meta:
+        ordering = ["subject__name"]
+
+
 
 class ObservationSheet(BaseModel):
 
-    course = models.ForeignKey(Course,on_delete=models.CASCADE,blank=True, null=True, related_name="observation_sheets")
-    batch = models.ForeignKey(Batch,on_delete=models.CASCADE,blank=True, null=True, related_name="observation_sheets")
-    student = models.ForeignKey(Student,on_delete=models.CASCADE,blank=True, null=True, related_name="observations")
+    course = models.ForeignKey("course.Course",on_delete=models.CASCADE,blank=True, null=True, related_name="observation_sheets")
+    batch = models.ForeignKey("course.Batch",on_delete=models.CASCADE,blank=True, null=True, related_name="observation_sheets")
+    student = models.ForeignKey("student.Student",on_delete=models.CASCADE,blank=True, null=True, related_name="observations")
 
     index_no = models.PositiveIntegerField(null=True, blank=True)
     observation_date = models.DateField(null=True, blank=True)
@@ -77,9 +87,9 @@ class ObservationSheet(BaseModel):
 
 class FinalResult(BaseModel):
 
-    course = models.ForeignKey(Course, on_delete=models.CASCADE,blank=True, null=True,  related_name="final_results")
-    batch = models.ForeignKey(Batch, on_delete=models.CASCADE,blank=True, null=True,  related_name="final_results")
-    student = models.ForeignKey(Student, on_delete=models.CASCADE,blank=True, null=True,  related_name="final_results")
+    course = models.ForeignKey("course.Course", on_delete=models.CASCADE,blank=True, null=True,  related_name="final_results")
+    batch = models.ForeignKey("course.Batch", on_delete=models.CASCADE,blank=True, null=True,  related_name="final_results")
+    student = models.ForeignKey("student.Student", on_delete=models.CASCADE,blank=True, null=True,  related_name="final_results")
 
     training_programme = models.ForeignKey(TrainingProgramme,on_delete=models.SET_NULL,null=True,blank=True,related_name="final_results")
 

@@ -1,4 +1,5 @@
 from django.urls import path, include
+from kernel.views import UniqueCodeAPIView
  
 urlpatterns = [  
     path('accounts/', include('apps.accounts.urls', namespace='accounts')),
@@ -10,7 +11,8 @@ urlpatterns = [
 
     path('trainings/', include('apps.training.urls', namespace='trainings')),
     path('noticeboards/', include('apps.noticeboard.urls', namespace='noticeboards')),
-    
+
+    path("uniquecode/<str:type_name>/", UniqueCodeAPIView.as_view(), name="unique-code"),
 ]
 
 

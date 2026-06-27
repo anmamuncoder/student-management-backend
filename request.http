@@ -18,7 +18,8 @@ ALL_METHOD http://localhost:8020/api/v1/accounts/ranks/
 ALL_METHOD http://localhost:8020/api/v1/accounts/users/
 
 
-@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxMTE0NzQyLCJpYXQiOjE3Nzg1MjI3NDIsImp0aSI6IjNjOWMxNjQxMTEyMzQ0MzU5NmRmMmRjM2ExYWIyNDI4IiwiaWQiOiI2MWI0NjJkNi1hZTZmLTQyNTAtOTBjMS03OTA1ZWI2ZGQxODQifQ.jKHh46n_wBJ83VKYZEMT1HBz6SUIQ00sFpiHvW7XoPY
+@access_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgzNTMyMDAwLCJpYXQiOjE3ODA5NDAwMDAsImp0aSI6IjE2MGRhZmEzZmRiMTQ2ZWRiNzE5MTYxMzNjYzE3ZjViIiwiaWQiOiIxYWFmYWRkNi0xY2FhLTRhNjItYTYyOS0yMGY0Nzk0OGFiOTgifQ.i7SKmo3F57noBBQHjrHCM9drkMc1QOij85zofvHe8tg
+@teacher_token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgzNDUxNTU2LCJpYXQiOjE3ODA4NTk1NTYsImp0aSI6ImMzOTFmNmE3YmUzZTQ0YWI5NWMzMmE5OTcyZmNhZTA5IiwiaWQiOiI2OWMzZTQyNS0wZWEyLTRjOTYtOGIzMy04Y2MxODFjZDY5OWUifQ.jn508RkGalLmcbfTUQTEbgBZM3vFxz_K9eIMot_hFc8
 
 ### Registration
 POST http://localhost:8020/api/v1/accounts/register/  
@@ -44,15 +45,15 @@ Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoi
  
 
 ###
-POST https://backend.dipstick.xyz/api/v1/accounts/users/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5MDkyOTcxLCJpYXQiOjE3NzY1MDA5NzIsImp0aSI6ImI2MjljM2Y5ZTMwYjRiNDZhMmM2NDY2ZWI0MGQ4NGZiIiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.CkUCY5Xf5NAblk7YkcGfqRRWzX4tTl2FCL_ShPxQPJc
+POST https://backend.dipstick.bd/api/v1/accounts/users/
+Authorization:  Bearer {{superuser_token}}
 Content-Type: application/json
 
 {
-  "email": "student.demo@example.com",
+  "email": "staff.demo@example.com",
   "password": "Test@1234",
-  "full_name": "Demo Student",
-  "short_name": "Student",
+  "full_name": "Demo staff",
+  "short_name": "staff",
   "phone": "01722222222",
   "personal_number": "STU-1001",
 
@@ -117,12 +118,12 @@ Content-Type: application/json
 
 
 ###
-POST https://backend.dipstick.xyz/api/v1/accounts/users/
-Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzc5MDkyOTcxLCJpYXQiOjE3NzY1MDA5NzIsImp0aSI6ImI2MjljM2Y5ZTMwYjRiNDZhMmM2NDY2ZWI0MGQ4NGZiIiwiaWQiOiI4NGI3MWNmZC1iMDMwLTQ2ZDAtYjEyYy01OTY1YTE0YTAzZTQifQ.CkUCY5Xf5NAblk7YkcGfqRRWzX4tTl2FCL_ShPxQPJc
+POST https://backend.dipstick.bd/api/v1/accounts/users/
+Authorization:  Bearer {{superuser_token}}
 Content-Type: application/json
 
 {
-  "email": "staff.demo@example.com",
+  "email": "instrators.demo@example.com",
   "password": "Test@1234",
   "full_name": "Demo Staff",
   "short_name": "Staff You",
@@ -149,12 +150,12 @@ Content-Type: application/json
   "date_of_enrolment": "2026-04-14",
   "current_status": "active",
 
-  "role_slug": "staff"
+  "role_slug": "instructors"
 }
 
 
 ### Login
-POST http://localhost:8020/api/v1/accounts/login/
+POST http://127.0.0.1:8000/api/v1/accounts/login/
 Content-Type: application/json
 
 {
@@ -565,8 +566,8 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8020/api/v1/courses/courses/48c9f174-60f6-4a84-b773-70d62a0a35f4/
-Authorization:  Bearer {{superuser_token}}
+GET http://localhost:8020/api/v1/courses/courses/ 
+Authorization:  Bearer {{access_token}}
 
 ###
 GET  http://localhost:8020/api/v1/courses/courses/48c9f174-60f6-4a84-b773-70d62a0a35f4/
@@ -643,26 +644,265 @@ Content-Type: application/json
 }
 
 ###
-GET {{baseURL}}/trainings/observation-sheets/
+GET https://backend.dipstick.bd/api/v1/trainings/observation-sheets/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxNDE4MTcwLCJpYXQiOjE3Nzg4MjYxNzAsImp0aSI6ImViNGE4Mjk3NTFhNzRiNTQ5NjBiNGI5MTE0Mzc5YTdhIiwiaWQiOiJjOTNhMDM2NS02YzcxLTQ5YTItYTZlNS1kNmE3YzgyMWViNWYifQ.4-5alaH_pwPxFYHSdA9xOkl4TYowHcdtsoSnzF6ITCI
+Content-Type: application/json
+
+
+###
+POST https://backend.dipstick.bd/api/v1/trainings/observation-sheets/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgxNDE4MTcwLCJpYXQiOjE3Nzg4MjYxNzAsImp0aSI6ImViNGE4Mjk3NTFhNzRiNTQ5NjBiNGI5MTE0Mzc5YTdhIiwiaWQiOiJjOTNhMDM2NS02YzcxLTQ5YTItYTZlNS1kNmE3YzgyMWViNWYifQ.4-5alaH_pwPxFYHSdA9xOkl4TYowHcdtsoSnzF6ITCI
+Content-Type: application/json
+
+{
+    "remark":"Good"
+}
+
+
+###
+GET {{baseURL}}/courses/subjects/cad365de-5ea7-4a83-8c6e-1d80aab7525f/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+
+###
+GET {{baseURL}}/exams/exams/
+Authorization:  Bearer {{access_token}} 
+
+
+ 
+
+###
+GET {{baseURL}}/exams/exams/ 
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "name": "First Term Exam",
+    "exam_date": "2026-05-25",
+    "start_time": "02:28:53",
+    "end_time": "02:28:54",
+    "room_no": "asdf",
+    "grade_type": "b_side",
+    "note": "asdf",
+    "subject": "cad365de-5ea7-4a83-8c6e-1d80aab7525f"
+}
+
+
+
+
+###
+GET {{baseURL}}/exams/exam-results/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+
+### single exam
+GET {{baseURL}}/exams/exams/
+Authorization:  Bearer {{access_token}}
+
+
+
+### single exam ar attandace lock
+POST {{baseURL}}/exams/exams/1ffd3146-4097-46f8-b7d7-de3d17c10eef/lock_attendance/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    
+}
+
+
+### single exam ar attandace lock
+POST {{baseURL}}/exams/exams/1ffd3146-4097-46f8-b7d7-de3d17c10eef/unlock_attendance/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    
+}
+
+
+### kunu exam ar under a all student ar result dekhar jonno
+GET {{baseURL}}/exams/exam-results/?exam=1ffd3146-4097-46f8-b7d7-de3d17c10eef
+Authorization:  Bearer {{access_token}}
+
+
+### single student ar exam result update korar jonno
+PATCH  {{baseURL}}/exams/exam-results/b16f7aaa-bba2-4c60-83a3-47f062beed6c/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "status": "present"
+}
+
+
+
+
+
+
+
+
+
+###
+GET {{baseURL}}/exams/exams/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+###
+GET {{baseURL}}/exams/exam-results/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+###
+GET {{baseURL}}/exams/exam-grades/
 Authorization:  Bearer {{access_token}}
 Content-Type: application/json
 
 
 
 ###
-GET {{baseURL}}/trainings/final-results/
+GET {{baseURL}}/exams/exam-history/433aed56-e9ad-4053-9702-9ff8175386a8/?grade_type=b_side
 Authorization:  Bearer {{access_token}}
 Content-Type: application/json
 
 
 
 ###
-GET {{baseURL}}/noticeboards/events/
-Authorization:  Bearer {{access_token}}
+POST {{baseURL}}/exams/exam-attendance/all-status/?batch=bd6ad59b-3afc-43f7-ab37-9593a5fc59a2&exam=7d79b7bb-a788-40dd-8907-cc8a46c8754b
+Authorization:  Bearer {{teacher_token}}
 Content-Type: application/json
+
+{
+"status": "present"
+}
+
 
 
 ###
-GET {{baseURL}}/noticeboards/notices/
+GET  {{baseURL}}/exams/exam-attendance/91c4f3e5-7e96-4110-9dbf-73d494a77ca3/
 Authorization:  Bearer {{access_token}}
 Content-Type: application/json
+
+{ 
+  "status": "present" 
+}
+
+
+###
+GET  {{baseURL}}/courses/modules/ 
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+     
+}
+
+###
+GET {{baseURL}}/courses/batches/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+[
+  {
+    "id": "b88a2ee3-f830-4152-879b-aba8b1c53794",
+    "batch_subjects": [
+      {
+        "id": "6e3a21a0-1096-413f-8d9b-554ffd14c94c",
+        "created_at": "2026-05-15T21:17:07.765431+06:00",
+        "updated_at": "2026-05-18T22:41:52.976216+06:00",
+        "name": "Staff Resp",
+        "code": "SD-1",
+        "note": null,
+        "batch": "b88a2ee3-f830-4152-879b-aba8b1c53794"
+      }
+    ],
+    "created_at": "2026-05-15T21:17:37.121212+06:00",
+    "updated_at": "2026-05-15T21:17:37.121285+06:00",
+    "name": "OBC(AC) - Armament Leg Batch",
+    "batch_start": null,
+    "batch_end": null,
+    "vacation_option": "no",
+    "main_mark": 100,
+    "total_mark": 100,
+    "comds_obsn_mks": "no",
+    "ci_obsn_mks": "no",
+    "sis_obsn_mks": "no",
+    "oics_obsn_mks": "no",
+    "afvcf_dm": "no",
+    "afvcf_wrls": "no",
+    "ftx_dm": "no",
+    "ftx_gnry": "no",
+    "ftx_wrls": "no",
+    "note": "",
+    "course": "8d0cb247-11bd-473e-9cc2-dc2904a89edb",
+    "si": null,
+    "oic": null
+  },
+]
+
+
+###
+GET {{baseURL}}/uniquecode/subject/
+Authorization:  Bearer {{access_token}}
+
+###
+GET {{baseURL}}/uniquecode/module/
+Authorization:  Bearer {{access_token}}
+
+accounts/users/
+
+
+###
+GET https://backend.dipstick.bd/api/v1/accounts/users/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgzNDA3NzE0LCJpYXQiOjE3ODA4MTU3MTQsImp0aSI6IjY5MjE3NDk5OTE3ZjQ5MDViZWZkZjNmZDAyMjdkZDgxIiwiaWQiOiJmMTgwNjliNi0zNzE2LTQyNzQtODhjZi05ZDM3ZjVjMGU3ZmQifQ.oEZSfOfZVmSi9V0FlXOh2I0Z-urtbsNo_Czs2sC-XsI
+
+
+
+###
+GET  {{baseURL}}/accounts/users/self/
+Authorization:  Bearer {{access_token}}
+
+
+###
+POST {{baseURL}}/accounts/login/
+Content-Type: application/json
+
+{
+    "email": "2001@gmail.com",  
+    "password": "123"
+}
+
+
+###
+PATCH  {{baseURL}}/accounts/users/69c3e425-0ea2-4c96-8b33-8cc181cd699e/ 
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+    "password": "123"
+}
+
+
+###
+GET https://backend.dipstick.bd/api/v1/students/batch-memberships/
+Authorization:  Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzgzNDA3NzE0LCJpYXQiOjE3ODA4MTU3MTQsImp0aSI6IjY5MjE3NDk5OTE3ZjQ5MDViZWZkZjNmZDAyMjdkZDgxIiwiaWQiOiJmMTgwNjliNi0zNzE2LTQyNzQtODhjZi05ZDM3ZjVjMGU3ZmQifQ.oEZSfOfZVmSi9V0FlXOh2I0Z-urtbsNo_Czs2sC-XsI
+
+
+Authorization:  Bearer {{access_token}}
+
+### Create Exam Grade
+POST {{baseURL}}/exams/exam-grades/
+Authorization:  Bearer {{access_token}}
+Content-Type: application/json
+
+{
+  "b_side_grade": "Outstanding",
+  "y_side_grade": "Outstanding",
+  "grade_point": 7.0,
+  "mark_from": 90,
+  "mark_to": 100,
+  "note": "Outstanding"
+}
+

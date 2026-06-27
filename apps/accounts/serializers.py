@@ -170,10 +170,12 @@ class RankSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
 
-    password = serializers.CharField(write_only=True, required=True)
+    password = serializers.CharField(write_only=True, required=False)
     role_slug = serializers.CharField(write_only=True, required=False)
 
     user_role = serializers.SerializerMethodField(read_only=True)
+    role_group = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = [
@@ -242,6 +244,7 @@ class UserSerializer(serializers.ModelSerializer):
             "password",
             "role_slug",
             "user_role",
+            "role_group"
         ]
 
     def get_user_role(self, obj):
@@ -250,8 +253,22 @@ class UserSerializer(serializers.ModelSerializer):
         if hasattr(obj, "student"):
             roles.append("student")
 
+        if obj.is_superuser:
+            roles.append("admin")
+
         return roles
     
+    def get_role_group(self, obj):
+        role = obj.user_roles.select_related("role").first()
+
+        if role:
+            return role.role.group
+
+        if obj.is_superuser:
+            return "administrative"
+
+        return None
+
     def create(self, validated_data):
         password = validated_data.pop("password", None)
         role_slug = validated_data.pop("role_slug", None)
@@ -272,7 +289,15 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
     def update(self, instance, validated_data):
-        # BLOCK password update
-        validated_data.pop("password", None)
+        password = validated_data.pop("password", None)
+        validated_data.pop("role_slug", None)  # remove write-only extra field
 
-        return super().update(instance, validated_data)
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+
+        return instance

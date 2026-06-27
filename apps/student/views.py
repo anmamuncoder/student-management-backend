@@ -32,7 +32,7 @@ class BaseViewSet(ModelViewSet):
 # Student Type
 # ----------------------------
 class StudentTypeViewSet(BaseViewSet):
-    queryset = StudentType.objects.all()
+    queryset = StudentType.objects.all().order_by('-created_at')
     serializer_class = StudentTypeSerializer
 
 
@@ -40,7 +40,7 @@ class StudentTypeViewSet(BaseViewSet):
 # Student Group
 # ----------------------------
 class StudentGroupViewSet(BaseViewSet):
-    queryset = StudentGroup.objects.all()
+    queryset = StudentGroup.objects.all().order_by('-created_at')
     serializer_class = StudentGroupSerializer
 
 
@@ -68,7 +68,7 @@ class BatchMembershipViewSet(BaseViewSet):
 # Activity
 # ----------------------------
 class ActivityViewSet(BaseViewSet):
-    queryset = Activity.objects.all()
+    queryset = Activity.objects.all().order_by('-created_at')
     serializer_class = ActivitySerializer
 
 
@@ -76,7 +76,7 @@ class ActivityViewSet(BaseViewSet):
 # Spouse
 # ----------------------------
 class SpouseViewSet(BaseViewSet):
-    queryset = Spouse.objects.all()
+    queryset = Spouse.objects.all().order_by('-created_at')
     serializer_class = SpouseSerializer
 
 
@@ -84,7 +84,7 @@ class SpouseViewSet(BaseViewSet):
 # Qualification
 # ----------------------------
 class QualificationViewSet(BaseViewSet):
-    queryset = Qualification.objects.all()
+    queryset = Qualification.objects.all().order_by('-created_at')
     serializer_class = QualificationSerializer
 
 
@@ -92,7 +92,7 @@ class QualificationViewSet(BaseViewSet):
 # Bank Account
 # ----------------------------
 class BankAccountViewSet(BaseViewSet):
-    queryset = BankAccount.objects.all()
+    queryset = BankAccount.objects.all().order_by('-created_at')
     serializer_class = BankAccountSerializer
 
 
@@ -100,7 +100,7 @@ class BankAccountViewSet(BaseViewSet):
 # Military Qualification
 # ----------------------------
 class MilitaryQualificationViewSet(BaseViewSet):
-    queryset = MilitaryQualification.objects.all()
+    queryset = MilitaryQualification.objects.all().order_by('-created_at')
     serializer_class = MilitaryQualificationSerializer
 
 
@@ -108,7 +108,7 @@ class MilitaryQualificationViewSet(BaseViewSet):
 # Service Record
 # ----------------------------
 class ServiceRecordViewSet(BaseViewSet):
-    queryset = ServiceRecord.objects.all()
+    queryset = ServiceRecord.objects.all().order_by('-created_at')
     serializer_class = ServiceRecordSerializer
 
 
@@ -116,7 +116,7 @@ class ServiceRecordViewSet(BaseViewSet):
 # Award
 # ----------------------------
 class AwardViewSet(BaseViewSet):
-    queryset = Award.objects.all()
+    queryset = Award.objects.all().order_by('-created_at')
     serializer_class = AwardSerializer
 
 
@@ -124,7 +124,7 @@ class AwardViewSet(BaseViewSet):
 # UN Mission
 # ----------------------------
 class UNMissionViewSet(BaseViewSet):
-    queryset = UNMission.objects.all()
+    queryset = UNMission.objects.all().order_by('-created_at')
     serializer_class = UNMissionSerializer
 
 
@@ -132,5 +132,5 @@ class UNMissionViewSet(BaseViewSet):
 # Country Visited
 # ----------------------------
 class CountryVisitedViewSet(BaseViewSet):
-    queryset = CountryVisited.objects.all()
+    queryset = CountryVisited.objects.all().order_by('-created_at')
     serializer_class = CountryVisitedSerializer

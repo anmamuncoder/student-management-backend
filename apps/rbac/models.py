@@ -24,6 +24,13 @@ class Permission(BaseModel):
         self.slug = f"{slugify(self.resource)}:{slugify(self.action)}".lower()
         super().save(*args,**kwargs)
 
+
+class GroupRole(models.TextChoices):
+    ADMINISTRATIVE = "administrative", "Administrative"
+    TRAINING = "training", "Training"
+    OTHER = "other", "Other"
+    
+    
 class Role(BaseModel):
     """ A named group of permissions. 'admin', 'editor', 'viewer' """
 
@@ -31,6 +38,8 @@ class Role(BaseModel):
     slug = models.SlugField(max_length=100, unique=True, db_index=True)
     permissions = models.ManyToManyField(Permission,blank=True,related_name='roles')
     description = models.TextField(blank=True)
+
+    group = models.CharField(max_length=20,choices=GroupRole.choices,default=GroupRole.TRAINING)
 
     created_at  = models.DateTimeField(auto_now_add=True)
     updated_at  = models.DateTimeField(auto_now=True)

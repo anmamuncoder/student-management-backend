@@ -18,7 +18,7 @@ class UserViewSet(ModelViewSet):
 
     # /users/ - all except superusers
     def get_queryset(self):
-        return User.objects.filter(is_superuser=False)
+        return User.objects.all().order_by('-created_at')
 
     # /users/admin/ - only superusers
     @action(detail=False, methods=["get"], url_path="admin", permission_classes=[IsAdminUser])

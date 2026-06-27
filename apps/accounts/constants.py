@@ -41,6 +41,7 @@ class Wing(models.TextChoices):
     NAVY = "navy", "Navy"
     AIR_FORCE = "air_force", "Air Force"
     CIVIL = "civil", "Civil"
+    SCHOOL = "school", "School"
 
 
 # -------------------------------
